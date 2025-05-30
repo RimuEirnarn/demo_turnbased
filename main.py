@@ -22,6 +22,7 @@ GREEN = (50, 200, 50)
 
 number: TypeAlias = int | float
 
+
 class Temporary:
     def __init__(self, caller: "Entity", attr_name: str, value: number):
         self.temp = value
@@ -72,6 +73,7 @@ class Entity:
 
     def temp(self, attr: str, value: number):
         return Temporary(self, attr, value)
+
 
 # Player character class
 class Player(Entity):
@@ -144,7 +146,7 @@ class Player(Entity):
         self.energy = 0
         log_action(f'[{self.name}] Invoke: "Take This!"', (270, 50))
         self.burn(self.hp * 0.8)
-        with self.temp('crit_dmg', 4.2):
+        with self.temp("crit_dmg", 4.2):
             mult = self.impose_crit(12 * self.atk)
         self.generic_regen("mp", raw=100)
         return target.take_damage(mult)
@@ -152,7 +154,10 @@ class Player(Entity):
     def impose_crit(self, base_dmg: number):
         if random.random() <= self.crit_rate:
             crit = base_dmg * (1 + self.crit_dmg)
-            log_action(f"Does CRIT! from {round(base_dmg):,} to {round(crit):,} ({self.crit_dmg*100:,.2f}%)", (270, 75))
+            log_action(
+                f"Does CRIT! from {round(base_dmg):,} to {round(crit):,} ({self.crit_dmg*100:,.2f}%)",
+                (270, 75),
+            )
             return crit
         return base_dmg
 
@@ -164,7 +169,7 @@ class Enemy(Entity):
 
 # Demo characters
 player = Player("Hero", hp=3210, atk=2135, defense=490, spd=10, mp=100)
-enemy = Enemy("Dummy", hp=13_299_791_000, atk=0, defense=0, spd=5)
+enemy = Enemy("Dummy", hp=13_299_791_000, atk=500, defense=0, spd=5)
 
 # Turn state
 turn_order = sorted([player, enemy], key=lambda x: x.spd, reverse=True)
@@ -177,7 +182,9 @@ def draw_basic(entity: Entity, current_index: int):
     y = 50 + current_index * 100
     name_text = font.render(f"{entity.name}", True, WHITE)
     hp_text = font.render(
-        f"HP: {round(entity.hp):,}/{round(entity.max_hp):,}", True, RED
+        f"HP: {round(entity.hp):,}/{round(entity.max_hp):,} ({round(entity.hp/entity.max_hp*100)}%)",
+        True,
+        RED,
     )
     screen.blit(name_text, (50, y))
     screen.blit(hp_text, dest=(50, y + 25))
@@ -235,7 +242,6 @@ while running:
         running = False
         continue
 
-
     if isinstance(attacker, Enemy):
         pygame.time.wait(1000)
         this_dmg = attacker.attack(defender)
@@ -248,7 +254,10 @@ while running:
             this_dmg = attacker.skill(target=defender)
         else:
             this_dmg = attacker.basic_attack(defender)
-    log_action(f"{attacker.name} attacks {defender.name} for {round(this_dmg):,} damage", (50, 5))
+    log_action(
+        f"{attacker.name} attacks {defender.name} for {round(this_dmg):,} damage",
+        (50, 5),
+    )
 
     turn_index += 1
     clock.tick(60)
