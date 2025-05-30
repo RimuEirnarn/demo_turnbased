@@ -2,8 +2,9 @@
 import sys
 import random
 from typing import Literal, TypeAlias
-import pygame
 from enum import IntEnum
+import pygame
+from math import ceil
 
 # Initialize Pygame
 pygame.init()
@@ -182,7 +183,7 @@ def draw_basic(entity: Entity, current_index: int):
     y = 50 + current_index * 100
     name_text = font.render(f"{entity.name}", True, WHITE)
     hp_text = font.render(
-        f"HP: {round(entity.hp):,}/{round(entity.max_hp):,} ({round(entity.hp/entity.max_hp*100)}%)",
+        f"HP: {round(entity.hp):,}/{round(entity.max_hp):,} ({ceil(entity.hp/entity.max_hp*100)}%)",
         True,
         RED,
     )
