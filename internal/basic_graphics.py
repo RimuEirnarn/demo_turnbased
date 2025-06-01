@@ -2,7 +2,21 @@
 import pygame
 
 APP_TITLE = "Turn-based Demo"
-DISPLAY = (800, 600)
+RESOLUTIONS = [
+    (1920, 1080),
+    (2560, 1440),
+    (3840, 2160),
+    (1680, 1050),
+    (1920, 1200),
+    (1024, 768),
+    (1280, 960),
+    (2560, 1080),
+    (3440, 1440),
+    (1280, 720),
+    (1600, 900),
+    (1366, 768)
+]
+DISPLAY = RESOLUTIONS[-2]
 
 
 pygame.init() # pylint: disable=no-member
