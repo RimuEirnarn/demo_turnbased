@@ -1,0 +1,182 @@
+# pylint: disable=all
+import pygame
+import sys
+import os.path
+
+sys.path.append(os.path.abspath("./"))
+from internal.basic_graphics import anchored_position
+
+# Initialize Pygame
+pygame.init()
+
+# Screen setup
+screen_width, screen_height = 800, 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Pygame Bar System")
+
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+
+
+class Bar:
+    def __init__(
+        self,
+        x,
+        y,
+        width,
+        height,
+        max_value,
+        current_value,
+        color=GREEN,
+        bg_color=BLACK,
+        border_color=WHITE,
+        border_width=2,
+    ):
+        """
+        Create a bar that can represent progress, health, etc.
+
+        Parameters:
+            x, y: Position of the top-left corner
+            width, height: Dimensions of the bar
+            max_value: Maximum value the bar can represent
+            current_value: Current value the bar should show
+            color: Color of the filled portion
+            bg_color: Color of the background (unfilled portion)
+            border_color: Color of the border
+            border_width: Width of the border in pixels
+        """
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.max_value = max_value
+        self.current_value = current_value
+        self.color = color
+        self.bg_color = bg_color
+        self.border_color = border_color
+        self.border_width = border_width
+
+    def update_value(self, new_value):
+        """Update the current value of the bar (clamped between 0 and max_value)"""
+        self.current_value = max(0, min(new_value, self.max_value))
+
+    def draw(self, surface):
+        """Draw the bar on the given surface"""
+        # Calculate the filled width based on current value
+        filled_width = (self.current_value / self.max_value) * self.width
+
+        # Draw the background (unfilled portion)
+        pygame.draw.rect(
+            surface, self.bg_color, (self.x, self.y, self.width, self.height)
+        )
+
+        # Draw the filled portion
+        pygame.draw.rect(
+            surface, self.color, (self.x, self.y, filled_width, self.height)
+        )
+
+        # Draw the border
+        if self.border_width:
+            pygame.draw.rect(
+                surface,
+                self.border_color,
+                (self.x, self.y, self.width, self.height),
+                self.border_width,
+            )
+
+
+# Create some example bars
+health_bar = Bar(50, 50, 200, 30, 100, 100, RED)
+mana_bar = Bar(50, 100, 200, 30, 100, 75, BLUE)
+progress_bar = Bar(50, 150, 400, 20, 1, 0, YELLOW)  # For tasks that complete (0-1)
+
+rect0 = pygame.Rect(0, 0, 100, 10)
+rect0.bottomleft = (10, screen_height - 30)
+overlay = Bar(
+    rect0.x - 2,
+    rect0.y - 2,
+    rect0.width + 4,
+    rect0.height + 4,
+    max_value=100,
+    current_value=0,
+    color=WHITE,
+    border_width=0,
+)
+some_bar = Bar(
+    rect0.x, rect0.y, rect0.width, rect0.height, 100, 0, BLUE, border_width=0
+)
+
+# Main game loop
+clock = pygame.time.Clock()
+running = True
+
+# For demonstration - will increment progress bar
+progress = 0
+
+hp_v = overlay_v = 0
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                # Decrease health by 10 when '1' is pressed
+                health_bar.update_value(health_bar.current_value - 10)
+            elif event.key == pygame.K_2:
+                # Increase health by 10 when '2' is pressed
+                health_bar.update_value(health_bar.current_value + 10)
+            elif event.key == pygame.K_q:
+                running = False
+                continue
+
+    # Update progress bar for demonstration
+    progress += 0.001
+    if progress > 1:
+        progress = 0
+    progress_bar.update_value(progress)
+
+    overlay_v += 1
+    hp_v += 0.5
+    if overlay_v > 100:
+        overlay_v = 0
+    if hp_v > 100:
+        hp_v = 0
+    overlay.update_value(overlay_v)
+    some_bar.update_value(hp_v)
+
+    # Fill the screen
+    screen.fill((50, 50, 50))
+
+    # Draw the bars
+    health_bar.draw(screen)
+    mana_bar.draw(screen)
+    progress_bar.draw(screen)
+
+    overlay.draw(screen)
+    some_bar.draw(screen)
+
+    # Add some labels for clarity
+    font = pygame.font.SysFont(None, 24)
+    screen.blit(font.render("Health", True, WHITE), (50, 30))
+    screen.blit(font.render("Mana", True, WHITE), (50, 80))
+    screen.blit(font.render("Progress", True, WHITE), (50, 130))
+    screen.blit(
+        font.render("Press 1/2 to decrease/increase health", True, WHITE), (300, 50)
+    )
+    screen.blit(
+        font.render("HP/Shield", True, WHITE),
+        anchored_position("bottomleft", 20,70, (screen_width, screen_height)),
+    )
+
+    # Update the display
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()
