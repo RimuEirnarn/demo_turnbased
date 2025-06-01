@@ -4,7 +4,7 @@ import sys
 import os.path
 
 sys.path.append(os.path.abspath("./"))
-from internal.basic_graphics import anchored_position
+from internal.basic_graphics import anchored_position, DISPLAY as screen_size
 from internal.utils import EventState
 from internal.gui.button import Button
 from internal.gui.bars import Bar
@@ -13,8 +13,7 @@ from internal.gui.bars import Bar
 pygame.init()
 
 # Screen setup
-screen_width, screen_height = 800, 600
-screen_size = screen_width, screen_height
+screen_width, screen_height = screen_size
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pygame Bar System")
 
@@ -81,11 +80,11 @@ while running:
         if event.type == pygame.QUIT:
             running.set(False)
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                # Decrease health by 10 when '1' is pressed
+            if event.key == pygame.K_9:
+                # Decrease health by 10 when '9' is pressed
                 health_bar.update_value(health_bar.current_value - 10)
-            elif event.key == pygame.K_2:
-                # Increase health by 10 when '2' is pressed
+            elif event.key == pygame.K_0:
+                # Increase health by 10 when '0' is pressed
                 health_bar.update_value(health_bar.current_value + 10)
             elif event.key == pygame.K_q:
                 running.set(False)
@@ -136,7 +135,7 @@ while running:
     screen.blit(font.render("Mana", True, WHITE), (50, 80))
     screen.blit(font.render("Progress", True, WHITE), (50, 130))
     screen.blit(
-        font.render("Press 1/2 to decrease/increase health", True, WHITE), (300, 50)
+        font.render("Press 9/0 to decrease/increase health", True, WHITE), (300, 50)
     )
     screen.blit(
         font.render("HP/Shield", True, WHITE),
