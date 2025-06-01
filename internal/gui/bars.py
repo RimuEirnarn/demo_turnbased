@@ -35,10 +35,10 @@ class Bar:
         border_width: int = 2,
     ):
 
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        self._x = x
+        self._y = y
+        self._width = width
+        self._height = height
         self.max_value = max_value
         self.current_value = current_value
         self.color = color
@@ -48,27 +48,27 @@ class Bar:
 
     @property
     def pos(self) -> tuple[int, int]:
-        return (self.x, self.y)
+        return (self._x, self._y)
 
     @property
     def size(self) -> tuple[int, int]:
-        return (self.width, self.height)
+        return (self._width, self._height)
 
     @property
     def x(self) -> int:
-        return self.x
+        return self._x
 
     @property
     def y(self) -> int:
-        return self.y
+        return self._y
 
     @property
     def width(self) -> int:
-        return self.width
+        return self._width
 
     @property
     def height(self) -> int:
-        return self.height
+        return self._height
 
     def update_value(self, new_value):
         """Update the current value of the bar (clamped between 0 and max_value)"""
@@ -77,16 +77,16 @@ class Bar:
     def draw(self, surface):
         """Draw the bar on the given surface"""
         # Calculate the filled width based on current value
-        filled_width = (self.current_value / self.max_value) * self.width
+        filled_width = (self.current_value / self.max_value) * self._width
 
         # Draw the background (unfilled portion)
         pygame.draw.rect(
-            surface, self.bg_color, (self.x, self.y, self.width, self.height)
+            surface, self.bg_color, (self._x, self._y, self._width, self._height)
         )
 
         # Draw the filled portion
         pygame.draw.rect(
-            surface, self.color, (self.x, self.y, filled_width, self.height)
+            surface, self.color, (self._x, self._y, filled_width, self._height)
         )
 
         if self.border_width:
@@ -94,6 +94,6 @@ class Bar:
             pygame.draw.rect(
                 surface,
                 self.border_color,
-                (self.x, self.y, self.width, self.height),
+                (self._x, self._y, self._width, self._height),
                 self.border_width,
             )
