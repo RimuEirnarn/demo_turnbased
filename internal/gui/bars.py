@@ -1,7 +1,7 @@
 """Bars"""
 
 import pygame
-from ..basic_graphics import screen, GREEN, BLACK, WHITE
+from ..basic_graphics import GREEN, BLACK, WHITE
 
 
 class Bar:
