@@ -153,15 +153,11 @@ while running:
             elif event.key == pygame.K_q:
                 running = False
                 continue
-        # elif event.type == pygame.MOUSEBUTTONDOWN:
-            # if event.button == pygame.BUTTON_LEFT:
-                # button0.onclick()
-                button1.onclick()
-        # button0.on_event(event)
-        # button1.on_event(event)
+        button0.on_event(event)
+        button1.on_event(event)
 
-    button0.update(events)
-    button1.update(events)
+    # button0.update(events)
+    # button1.update(events)
 
     if button0.clicked:
         print("First button clicked")

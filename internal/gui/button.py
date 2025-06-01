@@ -34,6 +34,7 @@ class Button:
         self._hovered = False
         self.border_color = border_color
         self.border_width = border_width
+        self._active = False
 
     def draw(self, surface: pygame.Surface):
         """Draw button"""
@@ -65,10 +66,13 @@ class Button:
         if self.callback:
             self.callback()
 
+    def release(self):
+        self._active = False
+
     def onclick(self):
-        self._clicked = False
-        if self.hovered:
+        if self.hovered and self._active:
             self.click()
+        self._active = False
 
     def on_event(
         self,
@@ -76,14 +80,22 @@ class Button:
         button_type: int = 1,
     ):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == button_type:
-            if not self.hovered:
-                return
-            if not self._clicked:
-                self.click()
+            hovered = self.rect.collidepoint(event.pos)
+            if hovered:
+                self._active = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == button_type:
-            self._clicked = False
+            hovered = self.rect.collidepoint(event.pos)
+            if not hovered and not self._active:
+                return
+            self._clicked = True
+            if self.callback:
+                self.callback()
+            self._active = False
 
     @property
     def clicked(self):
         """Return True if this button is clicked"""
-        return self._clicked
+        if self._clicked:
+            self._clicked = False
+            return True
+        return False
