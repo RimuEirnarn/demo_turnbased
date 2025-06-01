@@ -1,5 +1,8 @@
 """Basic graphics"""
+
 import pygame
+
+from internal.types import AnchorEnum
 
 APP_TITLE = "Turn-based Demo"
 RESOLUTIONS = [
@@ -14,12 +17,11 @@ RESOLUTIONS = [
     (3440, 1440),
     (1280, 720),
     (1600, 900),
-    (1366, 768)
+    (1366, 768),
 ]
 DISPLAY = RESOLUTIONS[-2]
 
-
-pygame.init() # pylint: disable=no-member
+pygame.init()  # pylint: disable=no-member
 screen = pygame.display.set_mode(DISPLAY)
 pygame.display.set_caption(APP_TITLE)
 clock = pygame.time.Clock()
@@ -36,3 +38,19 @@ def log_action(value: str, dest: tuple[int, int]):
     # print(value)
     text = font.render(value, True, WHITE)
     screen.blit(text, dest=dest)
+
+
+def anchored_position(
+    anchor: AnchorEnum, offset_x: int = 0, offset_y: int = 0, screen_size: tuple[int, int] = (0, 0)
+):
+    """Anchor position relative from screen"""
+    if anchor == "topleft":
+        return (offset_x, offset_y)
+    elif anchor == "topright":
+        return (screen_size[0] - offset_x, offset_y)
+    elif anchor == "bottomleft":
+        return (offset_x, screen_size[1] - offset_y)
+    elif anchor == "bottomright":
+        return (screen_size[0] - offset_x, screen_size[1] - offset_y)
+    else:  # Default to center
+        return (screen_size[0] // 2 + offset_x, screen_size[1] // 2 + offset_y)
