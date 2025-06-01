@@ -1,6 +1,8 @@
 """Bars"""
 
 import pygame
+
+from internal.types import RGB, number
 from ..basic_graphics import GREEN, BLACK, WHITE
 
 
@@ -21,16 +23,16 @@ class Bar:
 
     def __init__(
         self,
-        x,
-        y,
-        width,
-        height,
-        max_value,
-        current_value,
-        color=GREEN,
-        bg_color=BLACK,
-        border_color=WHITE,
-        border_width=2,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        max_value: number,
+        current_value: number,
+        color: RGB = GREEN,
+        bg_color: RGB = BLACK,
+        border_color: RGB = WHITE,
+        border_width: int = 2,
     ):
 
         self.x = x
@@ -43,6 +45,30 @@ class Bar:
         self.bg_color = bg_color
         self.border_color = border_color
         self.border_width = border_width
+
+    @property
+    def pos(self) -> tuple[int, int]:
+        return (self.x, self.y)
+
+    @property
+    def size(self) -> tuple[int, int]:
+        return (self.width, self.height)
+
+    @property
+    def x(self) -> int:
+        return self.x
+
+    @property
+    def y(self) -> int:
+        return self.y
+
+    @property
+    def width(self) -> int:
+        return self.width
+
+    @property
+    def height(self) -> int:
+        return self.height
 
     def update_value(self, new_value):
         """Update the current value of the bar (clamped between 0 and max_value)"""
