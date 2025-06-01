@@ -30,7 +30,7 @@ class Button:
         self.text_color = text_color
         self.callback = callback
         self.font = pygame.font.SysFont(None, font_size)
-        self._clicked= False
+        self._clicked = False
         self._hovered = False
         self.border_color = border_color
         self.border_width = border_width
@@ -46,18 +46,42 @@ class Button:
             text_rect = text_surf.get_rect(center=self.rect.center)
             surface.blit(text_surf, text_rect)
 
-    def update(self, event_list: list):
+    @property
+    def hovered(self):
+        mouse_pos = pygame.mouse.get_pos()
+        self._hovered = self.rect.collidepoint(mouse_pos)
+        return self._hovered
+
+    def update(self, event_list: list[pygame.event.Event]):
         self._clicked = False
         mouse_pos = pygame.mouse.get_pos()
         self._hovered = self.rect.collidepoint(mouse_pos)
 
         for event in event_list:
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if not self._hovered:
-                    return
-                self._clicked = True
-                if self.callback:
-                    self.callback()
+            self.on_event(event)
+
+    def click(self):
+        self._clicked = True
+        if self.callback:
+            self.callback()
+
+    def onclick(self):
+        self._clicked = False
+        if self.hovered:
+            self.click()
+
+    def on_event(
+        self,
+        event: pygame.event.Event,
+        button_type: int = 1,
+    ):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == button_type:
+            if not self.hovered:
+                return
+            if not self._clicked:
+                self.click()
+        if event.type == pygame.MOUSEBUTTONUP and event.button == button_type:
+            self._clicked = False
 
     @property
     def clicked(self):
