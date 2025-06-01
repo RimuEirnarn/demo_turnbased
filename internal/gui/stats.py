@@ -1,7 +1,7 @@
 """Stats-related GUI"""
 from math import ceil
 from ..basic_graphics import font, screen, GREEN, RED, WHITE
-from ..entities import Entity, Player, Enemy
+from ..entities import Entity, Character, Enemy
 
 def draw_basic(entity: Entity, current_index: int):
     y = 50 + current_index * 100
@@ -16,7 +16,7 @@ def draw_basic(entity: Entity, current_index: int):
     return y
 
 
-def draw_player(entity: Player, current_index: int):
+def draw_player(entity: Character, current_index: int):
     y = draw_basic(entity, current_index)
     mp_text = font.render(f"MP: {round(entity.mp)}/{round(entity.max_mp)}", True, GREEN)
     energy_text = font.render(
@@ -32,5 +32,5 @@ def draw_bars(iterables):
     for i, entity in enumerate(iterables):
         if isinstance(entity, Enemy):
             draw_basic(entity, i)
-        if isinstance(entity, Player):
+        if isinstance(entity, Character):
             draw_player(entity, i)

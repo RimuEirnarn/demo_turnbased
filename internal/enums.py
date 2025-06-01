@@ -7,3 +7,4 @@ class State(IntEnum):
     NOT_ENOUGH_MP = -1
     NOT_ENOUGH_ENERGY = -2
     UNDEFINED = -999
+    OK = -1000

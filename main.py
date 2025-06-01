@@ -6,7 +6,7 @@ import pygame
 
 from internal.basic_graphics import screen, BLACK, log_action, clock
 from internal.characters.hero import Hero
-from internal.entities import Enemy, Player
+from internal.entities import Enemy, Character
 from internal.gui.stats import draw_bars
 
 # Demo characters
@@ -46,7 +46,7 @@ while running:
         pygame.time.wait(1000)
         this_dmg = attacker.attack(defender)
         skill_name = "Enemy: Basic Attack"
-    if isinstance(attacker, Player):
+    if isinstance(attacker, Character):
         pygame.time.wait(750 + random.randint(0, 500))
         if attacker.energy == attacker.ult_encost:
             this_dmg = attacker.ultimate(defender)

@@ -18,13 +18,20 @@ class Entity:
         self.atk = atk
         self.defense = defense
         self.spd = spd
+        self.shield = 0
 
     def is_alive(self):
         return self.hp > 0
 
     def take_damage(self, dmg: number):
         actual_dmg = max(0, dmg - self.defense)
-        self.hp = max(0, self.hp - actual_dmg)
+        if not self.shield:
+            self.hp = max(0, self.hp - actual_dmg)
+            return actual_dmg
+
+        self.shield = self.shield - actual_dmg
+        if self.shield < 0:
+            self.hp = max(0, self.hp - abs(self.shield))
         return actual_dmg
 
     def attack(self, target: "Entity"):
@@ -38,7 +45,7 @@ class Entity:
 
 
 # Player character class
-class Player(Entity):
+class Character(Entity):
     def __init__(
         self,
         name: str,
@@ -57,6 +64,12 @@ class Player(Entity):
         self.crit_dmg = 0.5
         self.skill_mpcost = State.UNDEFINED
         self.ult_encost = self.max_energy
+
+    def check_mp(self, cost: number):
+        return self.mp >= cost
+
+    def check_energy(self, cost: number):
+        return self.energy >= cost
 
     def burn(self, value: number):
         if 0 < value < 1:
