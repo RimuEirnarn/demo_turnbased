@@ -27,9 +27,20 @@ YELLOW = (255, 255, 0)
 
 
 # Create some example bars
-health_bar = Bar(50, 50, 200, 30, 100, 100, RED)
-mana_bar = Bar(50, 100, 200, 30, 100, 75, BLUE)
-progress_bar = Bar(50, 150, 400, 20, 1, 0, YELLOW)  # For tasks that complete (0-1)
+health_bar = Bar(50, 50, 200, 30, 100, 100, RED, border_width=0)
+mana_bar = Bar(50, 150, 200, 30, 100, 75, BLUE)
+progress_bar = Bar(50, 250, 400, 20, 1, 0, YELLOW)  # For tasks that complete (0-1)
+
+shield = Bar(
+    health_bar.x - 4,
+    health_bar.y - 4,
+    health_bar.width + 8,
+    health_bar.height + 8,
+    100,
+    0,
+    WHITE,
+    border_width=0,
+)
 
 rect0 = pygame.Rect(0, 0, 100, 10)
 rect0.bottomleft = (10, screen_height - 30)
@@ -80,19 +91,34 @@ while running:
         if event.type == pygame.QUIT:
             running.set(False)
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_9:
-                # Decrease health by 10 when '9' is pressed
-                health_bar.update_value(health_bar.current_value - 10)
-            elif event.key == pygame.K_0:
-                # Increase health by 10 when '0' is pressed
-                health_bar.update_value(health_bar.current_value + 10)
-            elif event.key == pygame.K_q:
+            # if event.key == pygame.K_9:
+            #     # Decrease health by 10 when '9' is pressed
+            #     health_bar.update_value(health_bar.current_value - 1)
+            # elif event.key == pygame.K_0:
+            #     # Increase health by 10 when '0' is pressed
+            #     health_bar.update_value(health_bar.current_value + 1)
+            # elif event.key == pygame.K_7:
+            #     shield.update_value(shield.current_value - 1)
+            # elif event.key == pygame.K_8:
+            #     shield.update_value(shield.current_value + 1)
+            if event.key == pygame.K_q:
                 running.set(False)
                 continue
         button0.on_keyevent(event)
         button1.on_keyevent(event)
         button0.on_event(event)
         button1.on_event(event)
+
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_7]:
+        shield.update_value(shield.current_value + 1)
+    if keys[pygame.K_8]:
+        shield.update_value(shield.current_value - 1)
+    if keys[pygame.K_9]:
+        health_bar.update_value(health_bar.current_value + 1)
+    if keys[pygame.K_0]:
+        health_bar.update_value(health_bar.current_value - 1)
 
     # button0.update(events)
     # button1.update(events)
@@ -119,9 +145,10 @@ while running:
     screen.fill((50, 50, 50))
 
     # Draw the bars
+    progress_bar.draw(screen)
+    shield.draw(screen)
     health_bar.draw(screen)
     mana_bar.draw(screen)
-    progress_bar.draw(screen)
 
     overlay.draw(screen)
     some_bar.draw(screen)
@@ -131,11 +158,14 @@ while running:
 
     # Add some labels for clarity
     font = pygame.font.SysFont(None, 24)
-    screen.blit(font.render("Health", True, WHITE), (50, 30))
-    screen.blit(font.render("Mana", True, WHITE), (50, 80))
-    screen.blit(font.render("Progress", True, WHITE), (50, 130))
+    screen.blit(font.render("Health + Shield", True, WHITE), (50, 30))
+    screen.blit(font.render("Mana", True, WHITE), (50, 130))
+    screen.blit(font.render("Progress", True, WHITE), (50, 230))
     screen.blit(
-        font.render("Press 9/0 to decrease/increase health", True, WHITE), (300, 50)
+        font.render(
+            "Press 9/0 to increase/decrease health, 7/8 to increase/decrease shield", True, WHITE
+        ),
+        (300, 50),
     )
     screen.blit(
         font.render("HP/Shield", True, WHITE),
