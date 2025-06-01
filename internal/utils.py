@@ -17,3 +17,16 @@ class Temporary:
     def __exit__(self, *_):
         setattr(self.caller, self.attr_name, self.orig)
         return False
+
+class EventState:
+    def __init__(self, state: bool = False):
+        self._status = state
+
+    def __bool__(self):
+        return self._status
+
+    def set(self, status: bool):
+        self._status = status
+
+    def is_set(self):
+        return self._status

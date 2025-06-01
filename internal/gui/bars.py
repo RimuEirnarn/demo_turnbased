@@ -63,10 +63,11 @@ class Bar:
             surface, self.color, (self.x, self.y, filled_width, self.height)
         )
 
-        # Draw the border
-        pygame.draw.rect(
-            surface,
-            self.border_color,
-            (self.x, self.y, self.width, self.height),
-            self.border_width,
-        )
+        if self.border_width:
+            # Draw the border
+            pygame.draw.rect(
+                surface,
+                self.border_color,
+                (self.x, self.y, self.width, self.height),
+                self.border_width,
+            )

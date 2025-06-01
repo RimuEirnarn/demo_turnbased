@@ -5,7 +5,9 @@ import os.path
 
 sys.path.append(os.path.abspath("./"))
 from internal.basic_graphics import anchored_position
+from internal.utils import EventState
 from internal.gui.button import Button
+from internal.gui.bars import Bar
 
 # Initialize Pygame
 pygame.init()
@@ -23,73 +25,6 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
-
-
-class Bar:
-    def __init__(
-        self,
-        x,
-        y,
-        width,
-        height,
-        max_value,
-        current_value,
-        color=GREEN,
-        bg_color=BLACK,
-        border_color=WHITE,
-        border_width=2,
-    ):
-        """
-        Create a bar that can represent progress, health, etc.
-
-        Parameters:
-            x, y: Position of the top-left corner
-            width, height: Dimensions of the bar
-            max_value: Maximum value the bar can represent
-            current_value: Current value the bar should show
-            color: Color of the filled portion
-            bg_color: Color of the background (unfilled portion)
-            border_color: Color of the border
-            border_width: Width of the border in pixels
-        """
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.max_value = max_value
-        self.current_value = current_value
-        self.color = color
-        self.bg_color = bg_color
-        self.border_color = border_color
-        self.border_width = border_width
-
-    def update_value(self, new_value):
-        """Update the current value of the bar (clamped between 0 and max_value)"""
-        self.current_value = max(0, min(new_value, self.max_value))
-
-    def draw(self, surface):
-        """Draw the bar on the given surface"""
-        # Calculate the filled width based on current value
-        filled_width = (self.current_value / self.max_value) * self.width
-
-        # Draw the background (unfilled portion)
-        pygame.draw.rect(
-            surface, self.bg_color, (self.x, self.y, self.width, self.height)
-        )
-
-        # Draw the filled portion
-        pygame.draw.rect(
-            surface, self.color, (self.x, self.y, filled_width, self.height)
-        )
-
-        # Draw the border
-        if self.border_width:
-            pygame.draw.rect(
-                surface,
-                self.border_color,
-                (self.x, self.y, self.width, self.height),
-                self.border_width,
-            )
 
 
 # Create some example bars
@@ -129,9 +64,11 @@ button1 = Button(
     callback=lambda: print("Hello, World from Callback")
 )
 
+button0.register_key(pygame.K_1)
+button1.register_key(pygame.K_2)
 # Main game loop
 clock = pygame.time.Clock()
-running = True
+running = EventState(True)
 
 # For demonstration - will increment progress bar
 progress = 0
@@ -142,7 +79,7 @@ while running:
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
-            running = False
+            running.set(False)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
                 # Decrease health by 10 when '1' is pressed
@@ -151,8 +88,10 @@ while running:
                 # Increase health by 10 when '2' is pressed
                 health_bar.update_value(health_bar.current_value + 10)
             elif event.key == pygame.K_q:
-                running = False
+                running.set(False)
                 continue
+        button0.on_keyevent(event)
+        button1.on_keyevent(event)
         button0.on_event(event)
         button1.on_event(event)
 

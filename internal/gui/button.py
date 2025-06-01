@@ -35,6 +35,16 @@ class Button:
         self.border_color = border_color
         self.border_width = border_width
         self._active = False
+        self._event_key = None
+        self._disabled = False
+
+    @property
+    def disabled(self):
+        return self._disabled
+
+    @disabled.setter
+    def disabled(self, matter: bool):
+        self._disabled = matter
 
     def draw(self, surface: pygame.Surface):
         """Draw button"""
@@ -79,6 +89,8 @@ class Button:
         event: pygame.event.Event,
         button_type: int = 1,
     ):
+        if self.disabled:
+            return
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == button_type:
             hovered = self.rect.collidepoint(event.pos)
             if hovered:
@@ -91,6 +103,27 @@ class Button:
             if self.callback:
                 self.callback()
             self._active = False
+
+    def on_keyevent(self,
+                    event: pygame.event.Event):
+        if self.disabled:
+            return
+        if self._event_key is None:
+            raise TypeError("Cannot use keyevent when this button is not registered to a key")
+
+        if event.type == pygame.KEYDOWN and event.key == self._event_key:
+            self._active = True
+
+        if event.type == pygame.KEYUP and event.key == self._event_key:
+            if not self._active:
+                return
+            self._clicked = True
+            if self.callback:
+                self.callback()
+            self._active = False
+
+    def register_key(self, key_type: int):
+        self._event_key = key_type
 
     @property
     def clicked(self):
