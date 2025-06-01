@@ -3,7 +3,7 @@
 
 import random
 from typing import Literal
-from .enums import State
+from .enums import StateEnum
 from .types import number
 from .utils import Temporary
 from .basic_graphics import log_action
@@ -58,11 +58,11 @@ class Character(Entity):
         super().__init__(name, hp, atk, defense, spd)
         self.max_mp = mp
         self.mp = mp
-        self.max_energy = State.UNDEFINED
+        self.max_energy = StateEnum.UNDEFINED
         self.energy = 0
         self.crit_rate = 0.25
         self.crit_dmg = 0.5
-        self.skill_mpcost = State.UNDEFINED
+        self.skill_mpcost = StateEnum.UNDEFINED
         self.ult_encost = self.max_energy
 
     def check_mp(self, cost: number):
@@ -82,7 +82,7 @@ class Character(Entity):
             return
         match type_:
             case "energy":
-                if self.max_energy == State.UNDEFINED:
+                if self.max_energy == StateEnum.UNDEFINED:
                     raise ValueError("Cannot proceed with undefined Energy.")
                 if mult != -1:
                     base = self.max_energy * mult
@@ -99,13 +99,13 @@ class Character(Entity):
                 return
 
     def basic_attack(self, target: Entity):
-        return State.UNDEFINED
+        return StateEnum.UNDEFINED
 
     def skill(self, target: Entity):
-        return State.UNDEFINED
+        return StateEnum.UNDEFINED
 
     def ultimate(self, target: Entity):
-        return State.UNDEFINED
+        return StateEnum.UNDEFINED
 
     def impose_crit(self, base_dmg: number):
         if random.random() <= self.crit_rate:

@@ -4,7 +4,7 @@
 
 from ..entities import Character, Entity
 from ..types import number  # pylint: disable=no-name-in-module
-from ..enums import State
+from ..enums import StateEnum
 from ..basic_graphics import log_action
 
 
@@ -39,7 +39,7 @@ class Hero(Character):
 
     def skill(self, target: Entity):
         if self.mp < self.skill_mpcost:
-            return State.NOT_ENOUGH_MP
+            return StateEnum.NOT_ENOUGH_MP
         self.mp -= self.skill_mpcost
         self.generic_regen("energy", raw=15)
 
@@ -50,7 +50,7 @@ class Hero(Character):
 
     def ultimate(self, target: Entity):
         if self.energy < self.max_energy:
-            return State.NOT_ENOUGH_MP
+            return StateEnum.NOT_ENOUGH_MP
         self.energy = 0
         log_action(f'[{self.name}] Invoke: "Take This!"', (270, 50))
         self.burn(self.hp * 0.8)

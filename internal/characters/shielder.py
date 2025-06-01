@@ -4,7 +4,7 @@
 
 from typing import Iterable
 
-from internal.enums import State
+from internal.enums import StateEnum
 from ..entities import Character, Entity
 
 class Healer(Character):
@@ -22,19 +22,19 @@ class Healer(Character):
 
     def skill(self, targets: Iterable[Entity]):
         if not self.check_mp(self.max_mp * 0.2):
-            return State.NOT_ENOUGH_MP
+            return StateEnum.NOT_ENOUGH_MP
         self.mp -= self.skill_mpcost
 
         for target in targets:
             target.shield += self.max_hp * 0.45
 
-        return State.OK
+        return StateEnum.OK
 
     def ultimate(self, targets: Iterable[Entity]):
         if not self.check_energy(self.max_energy):
-            return State.NOT_ENOUGH_ENERGY
+            return StateEnum.NOT_ENOUGH_ENERGY
         self.energy -= self.max_energy
 
         for target in targets:
             target.shield += self.max_hp * 0.75
-        return State.OK
+        return StateEnum.OK
