@@ -5,12 +5,14 @@ import os.path
 
 sys.path.append(os.path.abspath("./"))
 from internal.basic_graphics import anchored_position
+from internal.gui.button import Button
 
 # Initialize Pygame
 pygame.init()
 
 # Screen setup
 screen_width, screen_height = 800, 600
+screen_size = screen_width, screen_height
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pygame Bar System")
 
@@ -111,6 +113,22 @@ some_bar = Bar(
     rect0.x, rect0.y, rect0.width, rect0.height, 100, 0, BLUE, border_width=0
 )
 
+button0 = Button(
+    *anchored_position("bottomright", 300, 50, screen_size),
+    width=200,
+    height=50,
+    text="Click me",
+    text_color=WHITE
+)
+button1 = Button(
+    *anchored_position("bottomright", 300, 400, screen_size),
+    width=200,
+    height=50,
+    text="Click me (Callback)",
+    text_color=WHITE,
+    callback=lambda: print("Hello, World from Callback")
+)
+
 # Main game loop
 clock = pygame.time.Clock()
 running = True
@@ -121,7 +139,8 @@ progress = 0
 hp_v = overlay_v = 0
 
 while running:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
@@ -134,6 +153,12 @@ while running:
             elif event.key == pygame.K_q:
                 running = False
                 continue
+
+    button0.update(events)
+    button1.update(events)
+
+    if button0.clicked:
+        print("First button clicked")
 
     # Update progress bar for demonstration
     progress += 0.001
@@ -161,6 +186,9 @@ while running:
     overlay.draw(screen)
     some_bar.draw(screen)
 
+    button0.draw(screen)
+    button1.draw(screen)
+
     # Add some labels for clarity
     font = pygame.font.SysFont(None, 24)
     screen.blit(font.render("Health", True, WHITE), (50, 30))
@@ -171,7 +199,7 @@ while running:
     )
     screen.blit(
         font.render("HP/Shield", True, WHITE),
-        anchored_position("bottomleft", 20,70, (screen_width, screen_height)),
+        anchored_position("bottomleft", 20, 70, (screen_width, screen_height)),
     )
 
     # Update the display
