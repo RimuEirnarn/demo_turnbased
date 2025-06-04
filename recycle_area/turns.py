@@ -20,7 +20,7 @@ summon_id = q.add_action(summon, base_av(160))
 
 def safe_input():
     r = input()
-    print('\033[2K\r\033[1A', end="")
+    print('\033[1K\033[2K\r', end="")
     return "0" if not r else r[0]
 
 # Process turns
