@@ -118,6 +118,33 @@ class ActionQueue:
 
         return None
 
+    def predict_action_index_after_update(self, action_id: str, new_av: number):
+        """Predict action index after update takes place"""
+        if action_id not in self.lookup:
+            raise ValueError("Action ID not found")
+
+        # Copy the current state
+        snapshot = [Action(a.id, a.value, a.source) for a in self.queue]
+
+        # Simulate AV update
+        updated_snapshot = []
+        for a in snapshot:
+            if a.id == action_id:
+                # Create updated version
+                updated_snapshot.append(Action(a.id, new_av, a.source, a.base_value))
+            else:
+                updated_snapshot.append(a)
+
+        # Sort predicted timeline
+        predicted_timeline = sorted(updated_snapshot, key=lambda a: a.value)
+
+        # Find index
+        for i, a in enumerate(predicted_timeline):
+            if a.id == action_id:
+                return i
+
+        return None
+
 
     def get_ordered_list(self):
         """Return as ordered list"""
