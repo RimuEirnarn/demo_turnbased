@@ -42,7 +42,7 @@ while True:
     next_act = q.pop_reinsert()
     next_index = q.predict_next_turn_index(next_act.id)
     print(
-        f"\n{next_act.source['name']} acts with priority {next_act.base_value}, will act again in {next_index + 1} ticks"
+        f"\n{next_act.source['name']} acts. Will act again in {next_index + 1} ticks"
     )
     print(
         tabulate.tabulate(
