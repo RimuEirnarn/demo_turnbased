@@ -8,6 +8,9 @@ from internal.types import number
 AV_K_VALUE = 28000
 ENEMY_BASE_SPD = 50
 
+FIRST_CYCLE_AV = 200
+CYCLE_AV = 150
+
 def base_av(spd: number):
     """Get base AV by SPD"""
     return AV_K_VALUE / spd
@@ -39,6 +42,9 @@ class ActionQueue:
     def __init__(self):
         self.queue: list[Action] = []  # Min-heap based on action value
         self.lookup: dict[str, Action] = {}  # Map action_id to Action
+        self.total_av = 0
+        self.cycles = 0
+        self.current_cycle_av = FIRST_CYCLE_AV
 
     def add_action(self, source: Entity, value: number, acting_id: str = ""):
         """Add action to current action order"""
@@ -62,6 +68,13 @@ class ActionQueue:
 
         for action in self.queue:
             action.value -= min_value
+
+        self.current_cycle_av -= min_value
+        self.total_av += min_value
+
+        if self.current_cycle_av <= 0:
+            self.current_cycle_av = CYCLE_AV
+            self.cycles += 1
 
         next_action = heapq.heappop(self.queue)
         del self.lookup[next_action.id]
