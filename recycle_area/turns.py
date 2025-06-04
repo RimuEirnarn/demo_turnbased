@@ -6,22 +6,22 @@ import tabulate
 
 sys.path.append(os.path.abspath("./"))
 
-from internal.turn_system import ActionQueue, base_av
+from internal.turn_system import ActionQueue, base_av, ENEMY_BASE_SPD
 
 # Example actors
 
 actors = [
-    {"type": "enemy", "name": "Goblin 1", "spd": 140},
+    {"type": "enemy", "name": "Goblin 1", "spd": ENEMY_BASE_SPD},
     {"type": "character", "name": "Hero", "spd": 400},
     {"type": "summon", "name": "Fire Sprite", "spd": 230},
     {"type": "character", "name": "Healer", "spd": 200},
     {"type": "character", "name": "Support slow", "spd": 95},
     {"type": "character", "name": "Support FAST", "spd": 180},
     {"type": "character", "name": "Sub-DPS", "spd": 340},
-    {"type": "enemy", "name": "Goblin 2", "spd": 140},
-    {"type": "enemy", "name": "Goblin 3", "spd": 140},
-    {"type": "enemy", "name": "Goblin 4", "spd": 140},
-    {"type": "enemy", "name": "Goblin 5", "spd": 140},
+    {"type": "enemy", "name": "Goblin 2", "spd": ENEMY_BASE_SPD},
+    {"type": "enemy", "name": "Goblin 3", "spd": ENEMY_BASE_SPD},
+    {"type": "enemy", "name": "Goblin 4", "spd": ENEMY_BASE_SPD},
+    {"type": "enemy", "name": "Goblin 5", "spd": ENEMY_BASE_SPD},
 ]
 
 # Create the queue
@@ -41,12 +41,13 @@ def safe_input():
 while True:
     next_act = q.pop_reinsert()
     next_index = q.predict_next_turn_index(next_act.id)
-    print(
-        f"\n{next_act.source['name']} acts. Will act again in {next_index + 1} ticks"
-    )
+    print(f"\n{next_act.source['name']} acts. Will act again in {next_index + 1} ticks")
     print(
         tabulate.tabulate(
-            ((index+1, act.source["name"], ceil(act.value)) for index, act in enumerate(q)),
+            (
+                (index + 1, act.source["name"], ceil(act.value))
+                for index, act in enumerate(q)
+            ),
             headers=("Ticks", "Name", "AV"),
             tablefmt="simple_outline",
         )
