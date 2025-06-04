@@ -8,12 +8,16 @@ from internal.basic_graphics import screen, BLACK, log_action, clock
 from internal.characters.hero import Hero
 from internal.entities import Enemy, Character
 from internal.gui.stats import draw_bars
+from internal.turn_system import ActionQueue, base_av
 
 # Demo characters
-player = Hero("Hero", hp=3210, atk=2135, defense=490, spd=10, mp=100)
-enemy = Enemy("Dummy", hp=13_299_791_000, atk=500, defense=0, spd=5)
+player = Hero("Hero", hp=3210, atk=2135, defense=490, spd=200, mp=100)
+enemy = Enemy("Dummy", hp=13_299_791_000, atk=500, defense=0, spd=20)
 
 # Turn state
+action_order = ActionQueue()
+action_order.add_action(player, base_av(player.spd))
+action_order.add_action(enemy, base_av(enemy.spd))
 turn_order = sorted([player, enemy], key=lambda x: x.spd, reverse=True)
 turn_index = 0
 
