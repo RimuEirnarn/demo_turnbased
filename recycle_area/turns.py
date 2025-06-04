@@ -1,12 +1,15 @@
 from math import ceil
 import sys
 import os.path
+import pygame
 
 import tabulate
 
 sys.path.append(os.path.abspath("./"))
 
 from internal.turn_system import ActionQueue, base_av, ENEMY_BASE_SPD
+
+pygame.quit() # pylint: disable=no-member
 
 # Example actors
 
