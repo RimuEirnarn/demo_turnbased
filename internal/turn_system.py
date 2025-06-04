@@ -5,7 +5,7 @@ import uuid
 from internal.entities import Entity
 from internal.types import number
 
-AV_K_VALUE = 10000
+AV_K_VALUE = 16000
 ENEMY_BASE_SPD = 50
 
 def base_av(spd: number):
