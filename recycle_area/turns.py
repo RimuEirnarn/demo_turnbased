@@ -85,7 +85,7 @@ while True:
         if next_index == 0
         else f"Will act in {next_index+1} ticks"
     )
-    print(f"\n[Action {loop+1} | Cycle {q.cycles} ({q.current_cycle_av})] {next_act.source['name']} acts. {msg}")
+    print(f"\n[Action {loop+1} | Cycle {q.cycles} ({q.current_cycle_av:.0f})] {next_act.source['name']} acts. {msg}")
     if subdps and hero:
         hero = q.get_action(hero.id)
         sub_dps = q.get_action(sub_dps.id)
@@ -98,7 +98,7 @@ while True:
     print(
         tabulate.tabulate(
             (
-                (index + 1, act.source["name"], ceil(act.value), round(act.value, 4))
+                (index + 1, act.source["name"], ceil(act.value))
                 for index, act in enumerate(q)
             ),
             headers=("Ticks", "Name", "AV"),
