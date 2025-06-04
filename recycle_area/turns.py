@@ -6,7 +6,7 @@ import tabulate
 
 sys.path.append(os.path.abspath("./"))
 
-from internal.turn_system import ActionQueue, base_av, ENEMY_BASE_SPD
+from internal.turn_system import AV_K_VALUE, ActionQueue, base_av, ENEMY_BASE_SPD
 
 # Example actors
 
@@ -22,6 +22,7 @@ actors = [
     {"type": "enemy", "name": "Goblin 3", "spd": ENEMY_BASE_SPD},
     {"type": "enemy", "name": "Goblin 4", "spd": ENEMY_BASE_SPD},
     {"type": "enemy", "name": "Goblin 5", "spd": ENEMY_BASE_SPD},
+    {"type": "summon", "name": "Tester", "spd": AV_K_VALUE / 10}
 ]
 
 # Create the queue
