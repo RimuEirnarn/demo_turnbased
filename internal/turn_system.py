@@ -2,6 +2,7 @@
 
 import heapq
 import uuid
+from internal.entities import Entity
 from internal.types import number
 
 AV_K_VALUE = 10000
@@ -38,7 +39,8 @@ class ActionQueue:
         self.queue = []  # Min-heap based on action value
         self.lookup = {}  # Map action_id to Action
 
-    def add_action(self, source, value):
+    def add_action(self, source: Entity, value: number):
+        """Add action to current action order"""
         action_id = str(uuid.uuid4())  # Generate unique ID
         action = Action(action_id, value, source)
         heapq.heappush(self.queue, action)
@@ -46,11 +48,13 @@ class ActionQueue:
         return action_id
 
     def get_next_action(self):
+        """Get next action"""
         if not self.queue:
             return None
         return self.queue[0]
 
     def pop_next_action(self):
+        """Return and pop next action"""
         if not self.queue:
             return None
         action = heapq.heappop(self.queue)
@@ -58,6 +62,7 @@ class ActionQueue:
         return action
 
     def update_action_value(self, action_id, new_value):
+        """Update an action's AV"""
         if action_id not in self.lookup:
             raise ValueError("Action ID not found")
         action = self.lookup[action_id]
@@ -65,6 +70,7 @@ class ActionQueue:
         heapq.heapify(self.queue)  # Re-sort the heap
 
     def remove_action(self, action_id):
+        """Remove an action"""
         if action_id not in self.lookup:
             return
         action = self.lookup[action_id]
@@ -73,7 +79,15 @@ class ActionQueue:
         del self.lookup[action_id]
 
     def get_ordered_list(self):
+        """Return as ordered list"""
         return sorted(self.queue, key=lambda a: a.value)
 
     def __len__(self):
         return len(self.queue)
+
+    def __iter__(self):
+        return iter(self.queue)
+
+    def get_action(self, action_id: str):
+        """Get specific action"""
+        return self.lookup[action_id]
