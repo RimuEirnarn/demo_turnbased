@@ -18,7 +18,7 @@ def modify_av_by_speed(old_av: number, spd_old: number, spd_new: number):
     return old_av * (spd_old / spd_new)
 
 
-def advance(old_av: number, baseav: number, av_advance: number, av_delay: number):
+def advance(old_av: number, baseav: number, av_advance: number = 0, av_delay: number = 0):
     """Advance/delay action"""
     return max(0, old_av - baseav * (av_advance - av_delay))
 
