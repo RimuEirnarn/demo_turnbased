@@ -14,7 +14,10 @@ pygame.init()
 
 # Screen setup
 screen_width, screen_height = screen_size
-screen = pygame.display.set_mode((screen_width, screen_height))
+window = pygame.display.set_mode((screen_width, screen_height))
+# window.set_alpha(128)
+screen = pygame.Surface(screen_size)
+# screen.set_alpha(128)
 pygame.display.set_caption("Pygame Bar System")
 
 # Colors
@@ -24,12 +27,12 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
-
+NULL = (0, 0, 0, 0)
 
 # Create some example bars
-health_bar = Bar(50, 50, 200, 30, 100, 100, RED, border_width=0)
-mana_bar = Bar(50, 150, 200, 30, 100, 75, BLUE)
-progress_bar = Bar(50, 250, 400, 20, 1, 0, YELLOW)  # For tasks that complete (0-1)
+health_bar = Bar(50, 50, 200, 30, 100, 100, RED, bg_color=NULL, border_width=0)
+mana_bar = Bar(50, 150, 200, 30, 100, 75, BLUE, bg_color=NULL)
+progress_bar = Bar(50, 250, 400, 20, 1, 0, YELLOW, bg_color=NULL)  # For tasks that complete (0-1)
 
 shield = Bar(
     health_bar.x - 4,
@@ -39,6 +42,7 @@ shield = Bar(
     100,
     0,
     WHITE,
+    NULL,
     border_width=0,
 )
 
@@ -173,6 +177,7 @@ while running:
     )
 
     # Update the display
+    window.blit(screen, (0, 0))
     pygame.display.flip()
     clock.tick(60)
 
