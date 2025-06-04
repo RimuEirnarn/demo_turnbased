@@ -105,6 +105,9 @@ while True:
             tablefmt="simple_outline",
         )
     )
-    if safe_input()[0] == "q":
+    t = safe_input()
+    if t[0] == "q":
         break
+    if t[0] == 'a':
+        print(f"Total AVs for this battle is: {q.total_av}")
     loop += 1
