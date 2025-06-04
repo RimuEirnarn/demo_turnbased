@@ -2,7 +2,7 @@
 
 import pygame
 
-from internal.types import RGB, number
+from internal.types import Colors, number
 from ..basic_graphics import GREEN, BLACK, WHITE
 
 
@@ -29,9 +29,9 @@ class Bar:
         height: int,
         max_value: number,
         current_value: number,
-        color: RGB = GREEN,
-        bg_color: RGB = BLACK,
-        border_color: RGB = WHITE,
+        color: Colors = GREEN,
+        bg_color: Colors = BLACK,
+        border_color: Colors = WHITE,
         border_width: int = 2,
     ):
 
