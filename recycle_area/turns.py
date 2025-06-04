@@ -14,9 +14,9 @@ summon = {"type": "summon", "name": "Fire Sprite"}
 q = ActionQueue()
 
 # Add actions
-enemy_id = q.add_action(enemy, base_av(20))
-player_id = q.add_action(player, base_av(200))
-summon_id = q.add_action(summon, base_av(20))
+enemy_id = q.add_action(enemy, base_av(160))
+player_id = q.add_action(player, base_av(400))
+summon_id = q.add_action(summon, base_av(160))
 
 def safe_input():
     r = input()
@@ -25,9 +25,8 @@ def safe_input():
 
 # Process turns
 while True:
-    next_act = q.pop_next_action()
-    q.add_action(next_act.source, base_av(next_act.base_value))
+    next_act = q.pop_reinsert()
     acts = " | ".join((f"{act.source['name']} -> {act.value}" for act in q))
-    print(f"{next_act.source['name']} acts with priority {next_act.base_value} | {acts}")
+    print(f"{next_act.source['name']} acts with priority {next_act.base_value}, will act again in {q.predict_next_turn_index(next_act.id)} | {acts}")
     if safe_input()[0] == 'q':
         break
