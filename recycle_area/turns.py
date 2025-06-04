@@ -6,7 +6,7 @@ import tabulate
 
 sys.path.append(os.path.abspath("./"))
 
-from internal.turn_system import AV_K_VALUE, ActionQueue, base_av, ENEMY_BASE_SPD
+from internal.turn_system import ActionQueue, base_av, ENEMY_BASE_SPD
 
 # Example actors
 
@@ -22,7 +22,6 @@ actors = [
     {"type": "enemy", "name": "Goblin 3", "spd": ENEMY_BASE_SPD},
     {"type": "enemy", "name": "Goblin 4", "spd": ENEMY_BASE_SPD},
     {"type": "enemy", "name": "Goblin 5", "spd": ENEMY_BASE_SPD},
-    {"type": "summon", "name": "Tester", "spd": AV_K_VALUE / 10}
 ]
 
 # Create the queue
@@ -42,14 +41,17 @@ def safe_input():
 while True:
     next_act = q.pop_reinsert()
     next_index = q.predict_next_turn_index(next_act.id)
-    print(f"\n{next_act.source['name']} acts. Will act again in {next_index + 1} ticks")
+    msg = "Will act immediately" if next_index == 0 else f"Will act in {next_index+1} ticks"
+    print(
+        f"\n{next_act.source['name']} acts. {msg}"
+    )
     print(
         tabulate.tabulate(
             (
-                (index + 1, act.source["name"], ceil(act.value))
+                (index + 1, act.source["name"], ceil(act.value), round(act.value, 4))
                 for index, act in enumerate(q)
             ),
-            headers=("Ticks", "Name", "AV"),
+            headers=("Ticks", "Name", "AV", "Real AV"),
             tablefmt="simple_outline",
         )
     )
