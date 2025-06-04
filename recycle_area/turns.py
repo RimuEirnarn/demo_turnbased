@@ -12,7 +12,7 @@ from internal.turn_system import ActionQueue, base_av, ENEMY_BASE_SPD
 
 actors = [
     {"type": "enemy", "name": "Goblin 1", "spd": ENEMY_BASE_SPD},
-    {"type": "character", "name": "Hero", "spd": 400},
+    {"type": "character", "name": "Hero", "spd": 800},
     {"type": "summon", "name": "Fire Sprite", "spd": 230},
     {"type": "character", "name": "Healer", "spd": 200},
     {"type": "character", "name": "Support slow", "spd": 95},
