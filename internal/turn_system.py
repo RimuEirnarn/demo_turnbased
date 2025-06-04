@@ -5,7 +5,7 @@ import uuid
 from internal.entities import Entity
 from internal.types import number
 
-AV_K_VALUE = 28000
+AV_K_VALUE = 10000
 ENEMY_BASE_SPD = 50
 
 FIRST_CYCLE_AV = 200
