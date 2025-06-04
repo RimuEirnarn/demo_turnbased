@@ -127,7 +127,7 @@ class ActionQueue:
         return len(self.queue)
 
     def __iter__(self):
-        return iter(self.queue)
+        return iter(self.get_ordered_list())
 
     def get_action(self, action_id: str):
         """Get specific action"""

@@ -1,32 +1,55 @@
+from math import ceil
 import sys
 import os.path
+
+import tabulate
 
 sys.path.append(os.path.abspath("./"))
 
 from internal.turn_system import ActionQueue, base_av
 
 # Example actors
-enemy = {"type": "enemy", "name": "Goblin"}
-player = {"type": "character", "name": "Hero"}
-summon = {"type": "summon", "name": "Fire Sprite"}
+
+actors = [
+    {"type": "enemy", "name": "Goblin 1", "spd": 140},
+    {"type": "character", "name": "Hero", "spd": 400},
+    {"type": "summon", "name": "Fire Sprite", "spd": 230},
+    {"type": "character", "name": "Healer", "spd": 200},
+    {"type": "character", "name": "Support", "spd": 95},
+    {"type": "character", "name": "Support", "spd": 180},
+    {"type": "character", "name": "Sub-DPS", "spd": 340},
+    {"type": "enemy", "name": "Goblin 2", "spd": 140},
+    {"type": "enemy", "name": "Goblin 3", "spd": 140},
+    {"type": "enemy", "name": "Goblin 4", "spd": 140},
+    {"type": "enemy", "name": "Goblin 5", "spd": 140},
+]
 
 # Create the queue
 q = ActionQueue()
 
-# Add actions
-enemy_id = q.add_action(enemy, base_av(160))
-player_id = q.add_action(player, base_av(400))
-summon_id = q.add_action(summon, base_av(160))
+for actor in actors:
+    q.add_action(actor, base_av(actor["spd"]))
+
 
 def safe_input():
     r = input()
-    print('\033[2K\r\033[1A', end="")
+    print("\033[2K\r\033[1A", end="")
     return "0" if not r else r[0]
+
 
 # Process turns
 while True:
     next_act = q.pop_reinsert()
-    acts = " | ".join((f"{act.source['name']} -> {act.value}" for act in q))
-    print(f"{next_act.source['name']} acts with priority {next_act.base_value}, will act again in {q.predict_next_turn_index(next_act.id)} | {acts}")
-    if safe_input()[0] == 'q':
+    next_index = q.predict_next_turn_index(next_act.id)
+    print(
+        f"\n{next_act.source['name']} acts with priority {next_act.base_value}, will act again in {next_index + 1} ticks"
+    )
+    print(
+        tabulate.tabulate(
+            ((index+1, act.source["name"], ceil(act.value)) for index, act in enumerate(q)),
+            headers=("Ticks", "Name", "AV"),
+            tablefmt="simple_outline",
+        )
+    )
+    if safe_input()[0] == "q":
         break
