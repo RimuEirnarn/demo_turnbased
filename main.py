@@ -55,7 +55,7 @@ def update_main():
 
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
         player.crit_dmg += 50
-        enemy.atk += 100
+        enemy.atk += 10
 
     attacker_action = action_order.pop_next_action()
     attacker = attacker_action.source
