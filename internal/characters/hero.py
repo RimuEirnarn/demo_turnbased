@@ -22,7 +22,7 @@ class Hero(Character):
         super().__init__(name, hp, atk, defense, spd, mp)
         self.max_mp = mp
         self.mp = mp
-        self.max_energy = 150
+        self.max_energy = 110
         self.energy = 0
         self.crit_rate = 1
         self.crit_dmg = 55.2
@@ -30,7 +30,7 @@ class Hero(Character):
         self.ult_encost = self.max_energy
 
     def basic_attack(self, target: Entity):
-        self.generic_regen("energy", raw=10)
+        self.generic_regen("energy", raw=15)
         self.generic_regen("mp", raw=20)
         log_action(f"[{self.name}] Invoke: Slash!", COMMON_ACTION_DEST)
         self.heal(0.1 * self.atk + 0.1 * self.max_hp)
@@ -43,7 +43,7 @@ class Hero(Character):
         if self.mp < self.skill_mpcost:
             return StateEnum.NOT_ENOUGH_MP
         self.mp -= self.skill_mpcost
-        self.generic_regen("energy", raw=15)
+        self.generic_regen("energy", raw=25)
 
         log_action(f"[{self.name}] Invoke: Harder Slash!", COMMON_ACTION_DEST)
         # self.heal(0.04 * self.atk)
