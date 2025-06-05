@@ -50,7 +50,7 @@ class Hero(Character):
         self.shield += 0.2 * self.atk
         if self.hp <= (self.max_hp * 0.5) and self.shield:
             burned_shield = self.shield * 0.5
-            self.heal(burned_shield + 0.75 * self.defense)
+            self.heal(burned_shield)
             self.shield -= burned_shield
         mult = self.impose_crit(60 * self.atk)
         return target.take_damage(mult)
