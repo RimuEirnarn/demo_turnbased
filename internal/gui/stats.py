@@ -1,13 +1,16 @@
 """Stats-related GUI"""
 
-from ..basic_graphics import font, screen, GREEN, WHITE, BLUE
+from typing import Iterable
+from ..basic_graphics import RED, font, screen, GREEN, WHITE, BLUE
 from ..entities import Entity, Character, Enemy
 from .bars import Bar
 
 
-def draw_basic(entity: Entity, current_index: int):
+def draw_basic(entity: Entity, current_index: int, focus: Entity = None):
     y = 50 + current_index * 150
-    name_text = font.render(f"{entity.name}", True, WHITE)
+    name_text = font.render(
+        f"{entity.name}", True, WHITE if entity is not focus else RED
+    )
     hp_text = font.render(
         f"{round(entity.hp):,}",
         True,
@@ -15,14 +18,17 @@ def draw_basic(entity: Entity, current_index: int):
     )
     hp_bar = Bar(50, y + 25, 200, 20, entity.max_hp, entity.hp, BLUE, border_width=0)
     shield_bar = Bar(
-        50 - 4, y + 25 - 4, 200 + 8, 20 + 8, entity.max_hp, entity.shield, WHITE, border_width=0
+        50 - 4,
+        y + 25 - 4,
+        200 + 8,
+        20 + 8,
+        entity.max_hp,
+        entity.shield,
+        WHITE,
+        border_width=0,
     )
     if entity.shield:
-        shield_text = font.render(
-            f"+{round(entity.shield):,}",
-            True,
-            WHITE
-        )
+        shield_text = font.render(f"+{round(entity.shield):,}", True, WHITE)
         screen.blit(shield_text, (330, y + 50))
     screen.blit(name_text, (50, y))
     screen.blit(hp_text, (270, y + 25))
@@ -31,8 +37,8 @@ def draw_basic(entity: Entity, current_index: int):
     return y
 
 
-def draw_player(entity: Character, current_index: int):
-    y = draw_basic(entity, current_index)
+def draw_player(entity: Character, current_index: int, focus: Entity = None):
+    y = draw_basic(entity, current_index, focus)
     # energy_text = font.render(
     #     f"Energy: {round(entity.energy)}/{round(entity.max_energy)} ({round(entity.energy/entity.max_energy*100)}%)",
     #     True,
@@ -42,11 +48,11 @@ def draw_player(entity: Character, current_index: int):
     # screen.blit(energy_text, dest=(50, y + 65))
     mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN, border_width=0)
     mp_text = font.render(f"{round(entity.mp)}/{round(entity.max_mp)}", True, WHITE)
-    energy_bar = Bar(50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE, border_width=0)
+    energy_bar = Bar(
+        50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE, border_width=0
+    )
     energy_text = font.render(
-        f"{round(entity.energy/entity.max_energy*100)}%",
-        True,
-        WHITE
+        f"{round(entity.energy/entity.max_energy*100)}%", True, WHITE
     )
     mp_bar.draw(screen)
     energy_bar.draw(screen)
@@ -54,9 +60,9 @@ def draw_player(entity: Character, current_index: int):
     screen.blit(energy_text, (energy_bar.x + energy_bar.width + 20, y + 80))
 
 
-def draw_bars(iterables):
+def draw_bars(iterables: Iterable[Entity], focus: Entity = None):
     for i, entity in enumerate(iterables):
         if isinstance(entity, Enemy):
-            draw_basic(entity, i)
+            draw_basic(entity, i, focus)
         if isinstance(entity, Character):
-            draw_player(entity, i)
+            draw_player(entity, i, focus)

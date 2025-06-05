@@ -77,7 +77,7 @@ def update_main():
         enemy.shield += enemy.max_hp * 0.75
         enemy_shield_time = True
 
-    draw_bars([player, enemy])
+    draw_bars([player, enemy], attacker)
     log_action(
         f"{attacker.name} attacks {defender.name} for {round(this_dmg):,} damage",
         (50, 5),
