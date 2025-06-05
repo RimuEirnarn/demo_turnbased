@@ -54,8 +54,9 @@ def update_main():
         return do_win()
 
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
+        player.max_hp += 5000
         player.crit_dmg += 50
-        enemy.atk += 10
+        enemy.atk += 100
 
     attacker_action = action_order.pop_next_action()
     attacker = attacker_action.source
