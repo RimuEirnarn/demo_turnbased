@@ -42,9 +42,12 @@ class Action:
         self.priority = priority
 
     def __lt__(self, other: "Action"):
-        if self.value == other.value:
-            return self.priority < other.priority
-        return self.value < other.value
+        return (
+            self.value < other.value
+            if self.value != other.value
+            else self.priority < other.priority
+        )
+
 
 class ActionQueue:
     """Action Order"""
