@@ -5,7 +5,7 @@
 from ..entities import Character, Entity
 from ..types import number  # pylint: disable=no-name-in-module
 from ..enums import StateEnum
-from ..basic_graphics import log_action
+from ..basic_graphics import log_action, COMMON_ACTION_DEST
 
 
 # Player character class
@@ -32,7 +32,7 @@ class Hero(Character):
     def basic_attack(self, target: Entity):
         self.generic_regen("energy", raw=10)
         self.generic_regen("mp", raw=20)
-        log_action(f"[{self.name}] Invoke: Slash!", (270, 50))
+        log_action(f"[{self.name}] Invoke: Slash!", COMMON_ACTION_DEST)
         self.heal(0.4 * self.atk)
         mult = self.impose_crit(40 * self.atk)
         return target.take_damage(mult)
@@ -43,7 +43,7 @@ class Hero(Character):
         self.mp -= self.skill_mpcost
         self.generic_regen("energy", raw=15)
 
-        log_action(f"[{self.name}] Invoke: Harder Slash!", (270, 50))
+        log_action(f"[{self.name}] Invoke: Harder Slash!", COMMON_ACTION_DEST)
         self.heal(0.4 * self.atk)
         mult = self.impose_crit(60 * self.atk)
         return target.take_damage(mult)
@@ -52,7 +52,7 @@ class Hero(Character):
         if self.energy < self.max_energy:
             return StateEnum.NOT_ENOUGH_MP
         self.energy = 0
-        log_action(f'[{self.name}] Invoke: "Take This!"', (270, 50))
+        log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
         self.burn(self.hp * 0.8)
         with self.temp("crit_dmg", 142.1):
             mult = self.impose_crit(120 * self.atk)
