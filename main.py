@@ -80,10 +80,22 @@ def update_main():
         return do_win()
 
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
-        player.crit_dmg += 1
+        player.crit_dmg += 2
         player.max_hp += 500
         enemy.atk += 4
         # player.defense += 0.5
+
+    if action_order.cycles % 5 == 0 and action_order.cycles != 0:
+        player.crit_dmg += 1
+        player.max_hp += 250
+
+    if action_order.cycles % 100 == 0 and action_order.cycles != 0:
+        player.crit_dmg += 20
+        player.max_hp += 5000
+
+    if action_order.cycles % 1000 == 0 and action_order.cycles != 0:
+        player.crit_dmg += 200
+        player.max_hp += 50000
 
     attacker_action = action_order.pop_next_action()
     attacker = attacker_action.source
