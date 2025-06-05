@@ -88,7 +88,7 @@ def update_main():
 while running:
     screen.fill((50, 50, 50))
     log_action(
-        f"Cycle {action_order.cycles} | Actions {action_order.total_actions} | Total AVs {action_order.total_av} | [Q] to close",
+        f"Cycle {action_order.cycles:,} | Actions {action_order.total_actions:,} | Total AVs {action_order.total_av:.1f} | [Q] to close",
         (50, 22),
     )
 
