@@ -39,7 +39,7 @@ timed = [
     (16, 8, 12, (0, 4)),  # Fast Ultimate
     (8, 4, 6, (0, 2)),  # Fast Pro
     (4, 2, 3, (0, 1)), # Fast Pro Max
-    (2, 1, 1, (0, 1)) # Fastest
+    (0, 0, 0, (0, 0)) # Fastest
 ]
 time_label = [
     "Normal",
