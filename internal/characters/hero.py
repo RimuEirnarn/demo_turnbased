@@ -24,7 +24,7 @@ class Hero(Character):
         self.mp = mp
         self.max_energy = 150
         self.energy = 0
-        self.crit_rate = 0.75
+        self.crit_rate = 1
         self.crit_dmg = 55.2
         self.skill_mpcost = 20
         self.ult_encost = self.max_energy
