@@ -18,8 +18,8 @@ null = Entity("<NULL>", 0, 0, 0, 0)
 
 # Turn state
 action_order = ActionQueue()
-action_order.add_action(player, base_av(player.spd))
-action_order.add_action(enemy, base_av(enemy.spd))
+action_order.add_action_by_value(player, base_av(player.spd))
+action_order.add_action_by_value(enemy, base_av(enemy.spd))
 turn_order = sorted([player, enemy], key=lambda x: x.spd, reverse=True)
 turn_index = 0
 
@@ -79,7 +79,7 @@ while running:
     )
 
     turn_index += 1
-    action_order.add_action(attacker, attacker_action.base_value, attacker_action.id)
+    action_order.add_action_by_value(attacker, attacker_action.base_value, attacker_action.id)
     clock.tick(60)
     pygame.display.flip()
 

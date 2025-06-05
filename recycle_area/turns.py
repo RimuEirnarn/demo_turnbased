@@ -34,7 +34,7 @@ actors = [
 q = ActionQueue()
 
 for actor in actors:
-    q.add_action(actor, base_av(actor["spd"]))
+    q.add_action_by_value(actor, base_av(actor["spd"]))
 
 
 def safe_input():
@@ -86,7 +86,7 @@ def show(action_order: ActionQueue | tuple):
 # Process turns
 while True:
     subdps = False
-    next_act: Action = q.pop_reinsert()
+    next_act: Action = q.pop_next_action()
     if next_act.source["name"] == "Hero":
         hero = next_act
     if next_act.source["name"] == "Sub-DPS":
@@ -96,7 +96,7 @@ while True:
         enemy = next_act
     if next_act.source['name'] == "Support slow":
         slow = next_act
-    next_index = q.predict_next_turn_index(next_act.id)
+    next_index = q.predict_next_turn_index(next_act)
     msg = (
         "Will act immediately"
         if next_index == 0
@@ -121,6 +121,7 @@ while True:
             advg(slow, adv)
 
     show(q)
+    q.add_action(next_act)
     t = safe_input()
     if t[0] == "q":
         break

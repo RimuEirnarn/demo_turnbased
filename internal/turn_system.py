@@ -60,8 +60,8 @@ class ActionQueue:
         self.current_cycle_av = FIRST_CYCLE_AV
         self.total_actions = 0
 
-    def add_action(self, source: Entity, value: number, acting_id: str = ""):
-        """Add action to current action order"""
+    def add_action_by_value(self, source: Entity, value: number, acting_id: str = ""):
+        """Add action (frmo values) to current action order"""
         action_id = (
             str(uuid.uuid4()) if acting_id == "" else acting_id
         )  # Generate unique ID
@@ -70,6 +70,13 @@ class ActionQueue:
         self.total_actions += 1
         self.lookup[action_id] = action
         return action_id
+
+    def add_action(self, action: Action):
+        """Add action to current action order"""
+        heapq.heappush(self.queue, action)
+        self.total_actions += 1
+        self.lookup[action.id] = action
+        return action.id
 
     def get_next_action(self):
         """Get next action"""
@@ -100,7 +107,7 @@ class ActionQueue:
     def pop_reinsert(self):
         """Return, pop, and reinsert next action"""
         action = self.pop_next_action()
-        self.add_action(action.source, action.base_value, acting_id=action.id)
+        self.add_action_by_value(action.source, action.base_value, acting_id=action.id)
         return action
 
     def update_action_value(self, action_id, new_value):
@@ -120,16 +127,14 @@ class ActionQueue:
         heapq.heapify(self.queue)
         del self.lookup[action_id]
 
-    def predict_next_turn_index(self, action_id: str):
+    def predict_next_turn_index(self, action: Action):
         """Predict when will an action takes turn after this action lasts"""
-        if action_id not in self.lookup:
-            return None
 
-        # Snapshot current AVs
+        # Snapshot current actions
         snapshot = [Action(a.id, a.value, a.source, a.priority) for a in self.queue]
 
         # Simulate reinsertion
-        target_action = self.lookup[action_id]
+        target_action = action
         predicted = Action(
             target_action.id,
             target_action.base_value,
@@ -143,7 +148,7 @@ class ActionQueue:
 
         # Find first occurrence of this ID
         for i, a in enumerate(timeline):
-            if a.id == action_id:
+            if a.id == action.id:
                 return i
 
         return None
