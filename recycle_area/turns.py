@@ -21,9 +21,9 @@ actors = [
     {"type": "character", "name": "Hero", "spd": 125},
     {"type": "summon", "name": "Fire Sprite", "spd": 130},
     {"type": "character", "name": "Healer", "spd": 133},
-    {"type": "character", "name": "Support slow", "spd": 102},
+    {"type": "character", "name": "Support slow", "spd": 92},
     {"type": "character", "name": "Support FAST", "spd": 162},
-    {"type": "character", "name": "Sub-DPS", "spd": 130},
+    {"type": "character", "name": "Sub-DPS", "spd": 180},
     {"type": "enemy", "name": "Goblin 2", "spd": ENEMY_BASE_SPD * 2},
     {"type": "enemy", "name": "Goblin 3", "spd": ENEMY_BASE_SPD * 2},
     {"type": "enemy", "name": "Goblin 4", "spd": ENEMY_BASE_SPD * 2},
@@ -46,6 +46,7 @@ def safe_input():
 hero = None
 enemy = None
 sub_dps = None
+slow = None
 adv = 0.7
 loop = 0
 
@@ -73,10 +74,10 @@ def show(action_order: ActionQueue | tuple):
     print(
         tabulate.tabulate(
             (
-                (index + 1, act.source["name"], ceil(act.value), round(act.value, 6))
+                (index + 1, act.source["name"], ceil(act.value), round(act.base_value, 6))
                 for index, act in enumerate(action_order)
             ),
-            headers=("Ticks", "Name", "AV", "Real AV"),
+            headers=("Ticks", "Name", "AV", "Base AV"),
             tablefmt="simple_outline",
         )
     )
@@ -93,6 +94,8 @@ while True:
         sub_dps = next_act
     if next_act.source["name"] == "Goblin 1":
         enemy = next_act
+    if next_act.source['name'] == "Support slow":
+        slow = next_act
     next_index = q.predict_next_turn_index(next_act.id)
     msg = (
         "Will act immediately"
@@ -113,6 +116,9 @@ while True:
         # if enemy:
         #     enemy = q.get_action(enemy.id)
         #     advg(enemy, 0, 2)
+        if slow:
+            slow = q.get_action(slow.id)
+            advg(slow, adv)
 
     show(q)
     t = safe_input()
