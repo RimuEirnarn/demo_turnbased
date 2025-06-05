@@ -28,11 +28,35 @@ running = True
 combat_log = ""
 skill_set = [1, 1, 2, 1, 1, 2]
 attack_index = 0
+time_index = 0
+timed = [
+    (2000, 1000, 750, (0, 500)),  # Normal
+    (1000, 500, 375, (0, 250)),  # Fast
+    (500, 250, 188, (0, 63)),  # Faster
+    (250, 63, 94, (0, 32)),  # Even Faster
+    (63, 32, 47, (0, 16)),  # Fast Deluxe
+    (32, 16, 24, (0, 8)),  # Fast Premium
+    (16, 8, 12, (0, 4)),  # Fast Ultimate
+    (8, 4, 6, (0, 2)),  # Fast Pro
+    (4, 2, 3, (0, 1)), # Fast Pro Max
+    (2, 1, 1, (0, 1)) # Fastest
+]
+time_label = [
+    "Normal",
+    "Fast (2x)",
+    "Faster (4x)",
+    "Even Faster (8x)",
+    "Fast Deluxe (16x)",
+    "Fast Premium (32x)",
+    "Fast Ultimate (64x)",
+    "Fast Pro Max (128x)",
+    "Fastest"
+]
 
 player.generic_regen("energy", 1)
 screen.fill((50, 50, 50))
 log_action(
-    f"Cycle {action_order.cycles} | Actions {action_order.total_actions} | Total AVs {action_order.total_av:,.1f} | [Q] to close",
+    f"Cycle {action_order.cycles} | Actions {action_order.total_actions} | Total AVs {action_order.total_av:,.1f} | [Q] to close | Fast Index: {time_label[time_index]}",
     (50, 22),
 )
 draw_bars([player, enemy])
@@ -40,12 +64,14 @@ pygame.display.flip()
 
 halting = False
 
+
 def do_win():
     winner = player.name if player.is_alive() else enemy.name
     print(f"Game Over. {winner} wins!")
     pygame.display.flip()
-    pygame.time.wait(2000)
+    pygame.time.wait(timed[time_index][0])
     return True
+
 
 def update_main():
     global enemy_shield_time
@@ -64,12 +90,12 @@ def update_main():
     this_dmg = 0
 
     if isinstance(attacker, Enemy):
-        pygame.time.wait(1000)
+        pygame.time.wait(timed[time_index][1])
         defender = player
         this_dmg = attacker.attack(player)
         player.generic_regen("energy", raw=5)
     if isinstance(attacker, Character):
-        pygame.time.wait(750 + random.randint(0, 500))
+        pygame.time.wait(timed[time_index][2] + random.randint(*timed[time_index][3]))
         if attacker.energy == attacker.ult_encost:
             this_dmg = attacker.ultimate(enemy)
         elif attacker.mp >= attacker.skill_mpcost:
@@ -100,7 +126,7 @@ def update_main():
 while running:
     screen.fill((50, 50, 50))
     log_action(
-        f"Cycle {action_order.cycles:,} | Actions {action_order.total_actions:,} | Total AVs {action_order.total_av:,.1f} | [Q] to close",
+        f"Cycle {action_order.cycles:,} | Actions {action_order.total_actions:,} | Total AVs {action_order.total_av:,.1f} | [Q] to close | Fast Index: {time_label[time_index]}",
         (50, 22),
     )
 
@@ -111,6 +137,24 @@ while running:
             if event.key == pygame.K_q:
                 running = False
                 continue
+            if event.key == pygame.K_0:
+                time_index = 0
+            if event.key == pygame.K_1:
+                time_index = 1
+            if event.key == pygame.K_2:
+                time_index = 2
+            if event.key == pygame.K_3:
+                time_index = 3
+            if event.key == pygame.K_4:
+                time_index = 4
+            if event.key == pygame.K_5:
+                time_index = 5
+            if event.key == pygame.K_6:
+                time_index = 6
+            if event.key == pygame.K_7:
+                time_index = 7
+            if event.key == pygame.K_8:
+                time_index = 8
 
     if not halting:
         halting = update_main()
