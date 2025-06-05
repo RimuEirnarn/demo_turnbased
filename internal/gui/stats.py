@@ -41,8 +41,8 @@ def draw_player(entity: Character, current_index: int):
     # )
     # screen.blit(mp_text, dest=(50, y + 50))
     # screen.blit(energy_text, dest=(50, y + 65))
-    mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN)
-    energy_bar = Bar(50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE)
+    mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN, border_width=0)
+    energy_bar = Bar(50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE, border_width=0)
     mp_bar.draw(screen)
     energy_bar.draw(screen)
 
