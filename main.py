@@ -82,7 +82,7 @@ def update_main():
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
         player.crit_dmg += 2
         player.max_hp += 500
-        enemy.atk += 4
+        enemy.atk += 100
         # player.defense += 0.5
 
     if action_order.cycles % 5 == 0 and action_order.cycles != 0:
