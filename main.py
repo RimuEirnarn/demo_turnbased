@@ -43,18 +43,20 @@ halting = False
 def do_win():
     winner = player.name if player.is_alive() else enemy.name
     print(f"Game Over. {winner} wins!")
+    pygame.display.flip()
     pygame.time.wait(2000)
     return True
 
 def update_main():
     global enemy_shield_time
+
+    if not player.is_alive() or not enemy.is_alive():
+        return do_win()
+
     attacker_action = action_order.pop_next_action()
     attacker = attacker_action.source
     defender = "<NULL>"
     this_dmg = 0
-
-    if not player.is_alive() or not enemy.is_alive():
-        return do_win()
 
     if isinstance(attacker, Enemy):
         pygame.time.wait(1000)
@@ -81,6 +83,8 @@ def update_main():
         (50, 5),
     )
 
+    if not player.is_alive() or not enemy.is_alive():
+        return do_win()
 
     action_order.add_action_by_value(
         attacker, attacker_action.base_value, attacker_action.id
