@@ -81,8 +81,8 @@ def update_main():
 
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
         player.crit_dmg += 1
-        player.max_hp += 100
-        enemy.atk += 1
+        player.max_hp += 250
+        enemy.atk += 2
         # player.defense += 0.5
 
     attacker_action = action_order.pop_next_action()
@@ -108,6 +108,10 @@ def update_main():
     if enemy.hp <= (enemy.max_hp * 0.25) and enemy_shield_time is False:
         enemy.shield += enemy.max_hp * 2.75
         enemy_shield_time = True
+
+    if enemy.hp <= (enemy.max_hp * 0.05) and enemy_shield_time is True:
+        enemy.shield += 8.25
+        enemy_shield_time = None
 
     draw_bars([player, enemy], attacker)
     log_action(
