@@ -68,17 +68,21 @@ class Character(Entity):
         self.ult_encost = self.max_energy
 
     def check_mp(self, cost: number):
+        """Check if current MP is more than cost"""
         return self.mp >= cost
 
     def check_energy(self, cost: number):
+        """Check if current energy is more than cost"""
         return self.energy >= cost
 
     def burn(self, value: number):
+        """Burn current HP based on value"""
         if 0 < value < 1:
             value = 1
         self.hp = max(min(self.hp, self.hp - value), 1)
 
     def generic_regen(self, type_: Literal["energy", "mp"], mult: number = -1, raw=-1):
+        """Apply regeneration for MP/Energy based on multiplier or raw value"""
         if mult == -1 and raw == -1:
             print("Error: Either provide raw value or multiplier increase")
             return
@@ -101,15 +105,19 @@ class Character(Entity):
                 return
 
     def basic_attack(self, target: Entity):
+        """Deals basic attack"""
         return StateEnum.UNDEFINED
 
     def skill(self, target: Entity):
+        """Deals Skill"""
         return StateEnum.UNDEFINED
 
     def ultimate(self, target: Entity):
+        """Deals Ultimate"""
         return StateEnum.UNDEFINED
 
     def impose_crit(self, base_dmg: number):
+        """Impose crit on this hit"""
         if random.random() <= self.crit_rate:
             crit = base_dmg * (1 + self.crit_dmg)
             log_action(
