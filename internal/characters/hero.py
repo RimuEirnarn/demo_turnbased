@@ -50,7 +50,7 @@ class Hero(Character):
         # self.shield += 0.2 * self.atk
         if self.hp <= (self.max_hp * 0.75) and self.shield:
             burned_shield = self.shield * 0.5
-            self.heal(burned_shield + self.max_mp * 0.15)
+            self.heal(burned_shield + self.max_hp * 0.2)
             self.shield -= burned_shield
         mult = self.impose_crit(20 * self.max_hp)
         return target.take_damage(mult)
@@ -62,7 +62,7 @@ class Hero(Character):
         log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
         burned_hp = self.hp * 0.75
         self.burn(burned_hp)
-        self.shield += burned_hp * 0.5
+        self.shield += burned_hp * 0.4
         # if self.shield:
             # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1):
