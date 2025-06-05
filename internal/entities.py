@@ -23,9 +23,11 @@ class Entity:
         self.shield = 0
 
     def is_alive(self):
+        """Return true if HP is more than 0"""
         return self.hp > 0
 
     def take_damage(self, dmg: number):
+        """This unit takes damage based on damage"""
         actual_dmg = max(0, dmg - self.defense)
         if not self.shield:
             self.hp = max(0, self.hp - actual_dmg)
@@ -37,12 +39,15 @@ class Entity:
         return actual_dmg
 
     def attack(self, target: "Entity"):
+        """Attack a target"""
         return target.take_damage(self.atk)
 
     def heal(self, value: number):
+        """Heal this unit based on value"""
         self.hp = min(self.hp + value, self.max_hp)
 
     def temp(self, attr: str, value: number):
+        """Temporarily change a value"""
         return Temporary(self, attr, value)
 
 
