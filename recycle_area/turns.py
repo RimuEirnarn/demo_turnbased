@@ -120,8 +120,8 @@ while True:
             slow = q.get_action(slow.id)
             advg(slow, adv)
 
-    show(q)
     q.add_action(next_act)
+    show(q)
     t = safe_input()
     if t[0] == "q":
         break
