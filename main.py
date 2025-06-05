@@ -68,6 +68,10 @@ halting = False
 def do_win():
     winner = player.name if player.is_alive() else enemy.name
     print(f"Game Over. {winner} wins!")
+    if winner is player:
+        player.heal(player.max_hp)
+        player.generic_regen('energy', 1)
+        player.generic_regen('mp', 1)
     pygame.display.flip()
     pygame.time.wait(timed[time_index][0])
     return True
@@ -79,10 +83,13 @@ def update_main():
     if not player.is_alive() or not enemy.is_alive():
         return do_win()
 
+    player.max_hp += 125
+    player.crit_dmg += 0.5
+
     if action_order.cycles % 10 == 0 and action_order.cycles != 0:
         player.crit_dmg += 2
         player.max_hp += 500
-        enemy.atk += 100
+        enemy.atk += 200
         # player.defense += 0.5
 
     if action_order.cycles % 5 == 0 and action_order.cycles != 0:
