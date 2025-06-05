@@ -48,9 +48,9 @@ class Hero(Character):
         log_action(f"[{self.name}] Invoke: Harder Slash!", COMMON_ACTION_DEST)
         self.heal(0.04 * self.atk)
         self.shield += 0.2 * self.atk
-        if self.hp <= (self.max_hp * 0.25) and self.shield:
+        if self.hp <= (self.max_hp * 0.5) and self.shield:
             self.heal(0.25 * self.shield + 0.75 * self.defense)
-            self.shield -= self.shield * 0.25
+            self.shield -= self.shield * 0.5
         mult = self.impose_crit(60 * self.atk)
         return target.take_damage(mult)
 
