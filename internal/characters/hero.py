@@ -64,7 +64,7 @@ class Hero(Character):
         log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
         burned_hp = self.hp * 0.75
         self.burn(burned_hp)
-        self.shield += burned_hp * 0.4
+        # self.shield += burned_hp * 0.4
         # if self.shield:
             # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1):
