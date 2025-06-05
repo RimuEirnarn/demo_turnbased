@@ -11,7 +11,7 @@ from internal.gui.stats import draw_bars
 from internal.turn_system import ActionQueue, base_av
 
 # Demo characters
-player = Hero("Hero", hp=3210, atk=2135, defense=490, spd=200, mp=100)
+player = Hero("Hero", hp=3210, atk=2135, defense=490, spd=800, mp=100)
 player.shield += 7500
 enemy = Enemy("Dummy", hp=13_299_791_000, atk=500, defense=0, spd=20)
 null = Entity("<NULL>", 0, 0, 0, 0)
