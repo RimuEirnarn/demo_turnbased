@@ -46,9 +46,9 @@ class Hero(Character):
         self.generic_regen("energy", raw=15)
 
         log_action(f"[{self.name}] Invoke: Harder Slash!", COMMON_ACTION_DEST)
-        self.heal(0.04 * self.atk)
+        # self.heal(0.04 * self.atk)
         self.shield += 0.2 * self.atk
-        if self.hp <= (self.max_hp * 0.5) and self.shield:
+        if self.hp <= (self.max_hp * 0.75) and self.shield:
             burned_shield = self.shield * 0.5
             self.heal(burned_shield)
             self.shield -= burned_shield
