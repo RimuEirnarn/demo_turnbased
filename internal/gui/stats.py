@@ -43,9 +43,15 @@ def draw_player(entity: Character, current_index: int):
     mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN, border_width=0)
     mp_text = font.render(f"{round(entity.mp)}/{round(entity.max_mp)}", True, WHITE)
     energy_bar = Bar(50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE, border_width=0)
+    energy_text = font.render(
+        f"{round(entity.energy/entity.max_energy*100)}%",
+        True,
+        WHITE
+    )
     mp_bar.draw(screen)
     energy_bar.draw(screen)
     screen.blit(mp_text, (mp_bar.x + mp_bar.width + 20, y + 55))
+    screen.blit(energy_text, (energy_bar.x + energy_bar.width + 20, y + 80))
 
 
 def draw_bars(iterables):
