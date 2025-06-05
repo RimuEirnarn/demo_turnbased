@@ -11,6 +11,7 @@ ENEMY_BASE_SPD = 50
 FIRST_CYCLE_AV = 200
 CYCLE_AV = 150
 
+
 def base_av(spd: number):
     """Get base AV by SPD"""
     return AV_K_VALUE / spd
@@ -21,36 +22,49 @@ def modify_av_by_speed(old_av: number, spd_old: number, spd_new: number):
     return old_av * (spd_old / spd_new)
 
 
-def advance(old_av: number, baseav: number, av_advance: number = 0, av_delay: number = 0):
+def advance(
+    old_av: number, baseav: number, av_advance: number = 0, av_delay: number = 0
+):
     """Advance/delay action"""
     return max(0, old_av - baseav * (av_advance - av_delay))
 
 
 class Action:
     """Action class"""
-    def __init__(self, action_id: str, value: number, source: Entity, __value = -1):
+
+    def __init__(
+        self, action_id: str, value: number, source: Entity, priority: int, __value=-1
+    ):
         self.id = action_id  # Unique identifier for the action
-        self.value = value   # Lower value means earlier turn
+        self.value = value  # Lower value means earlier turn
         self.base_value = value if __value == -1 else __value
         self.source = source  # Pointer to the actor (can be character/summon/enemy)
+        self.priority = priority
 
-    def __lt__(self, other):
-        return self.value < other.value  # Needed for heapq
+    def __lt__(self, other: "Action"):
+        if self.value == other.value:
+            return self.priority < other.priority
+        return self.value < other.value
 
 class ActionQueue:
     """Action Order"""
+
     def __init__(self):
         self.queue: list[Action] = []  # Min-heap based on action value
         self.lookup: dict[str, Action] = {}  # Map action_id to Action
         self.total_av = 0
         self.cycles = 0
         self.current_cycle_av = FIRST_CYCLE_AV
+        self.total_actions = 0
 
     def add_action(self, source: Entity, value: number, acting_id: str = ""):
         """Add action to current action order"""
-        action_id = str(uuid.uuid4()) if acting_id == "" else acting_id # Generate unique ID
-        action = Action(action_id, value, source)
+        action_id = (
+            str(uuid.uuid4()) if acting_id == "" else acting_id
+        )  # Generate unique ID
+        action = Action(action_id, value, source, priority=self.total_actions)
         heapq.heappush(self.queue, action)
+        self.total_actions += 1
         self.lookup[action_id] = action
         return action_id
 
@@ -109,15 +123,20 @@ class ActionQueue:
             return None
 
         # Snapshot current AVs
-        snapshot = [Action(a.id, a.value, a.source) for a in self.queue]
+        snapshot = [Action(a.id, a.value, a.source, a.priority) for a in self.queue]
 
         # Simulate reinsertion
         target_action = self.lookup[action_id]
-        predicted = Action(target_action.id, target_action.base_value, target_action.source)
+        predicted = Action(
+            target_action.id,
+            target_action.base_value,
+            target_action.source,
+            target_action.priority,
+        )
         snapshot.append(predicted)
 
         # Sort as it would appear in timeline
-        timeline = sorted(snapshot, key=lambda a: a.value)
+        timeline = sorted(snapshot, key=lambda a: a)
 
         # Find first occurrence of this ID
         for i, a in enumerate(timeline):
@@ -132,19 +151,21 @@ class ActionQueue:
             raise ValueError("Action ID not found")
 
         # Copy the current state
-        snapshot = [Action(a.id, a.value, a.source) for a in self.queue]
+        snapshot = [Action(a.id, a.value, a.source, a.priority) for a in self.queue]
 
         # Simulate AV update
         updated_snapshot = []
         for a in snapshot:
             if a.id == action_id:
                 # Create updated version
-                updated_snapshot.append(Action(a.id, new_av, a.source, a.base_value))
+                updated_snapshot.append(
+                    Action(a.id, new_av, a.source, a.priority, a.base_value)
+                )
             else:
                 updated_snapshot.append(a)
 
         # Sort predicted timeline
-        predicted_timeline = sorted(updated_snapshot, key=lambda a: a.value)
+        predicted_timeline = sorted(updated_snapshot, key=lambda a: a)
 
         # Find index
         for i, a in enumerate(predicted_timeline):
@@ -161,7 +182,7 @@ class ActionQueue:
 
     def get_ordered_list(self):
         """Return as ordered list"""
-        return sorted(self.queue, key=lambda a: a.value)
+        return sorted(self.queue, key=lambda a: a)
 
     def __len__(self):
         return len(self.queue)
