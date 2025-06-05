@@ -67,5 +67,5 @@ class Hero(Character):
             # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1):
             mult = self.impose_crit(120 * self.max_hp)
-        self.generic_regen("mp", raw=100)
+        self.generic_regen("mp", mult=0.5)
         return target.take_damage(mult)
