@@ -1,5 +1,6 @@
 """Stats-related GUI"""
 
+from math import ceil
 from typing import Iterable
 from ..basic_graphics import RED, font, screen, GREEN, WHITE, BLUE
 from ..entities import Entity, Character, Enemy
@@ -7,6 +8,7 @@ from .bars import Bar
 
 
 def draw_basic(entity: Entity, current_index: int, focus: Entity = None):
+    """Draw basic bars"""
     y = 50 + current_index * 150
     name_text = font.render(
         f"{entity.name}", True, WHITE if entity is not focus else RED
@@ -36,16 +38,16 @@ def draw_basic(entity: Entity, current_index: int, focus: Entity = None):
     hp_bar.draw(screen)
     return y
 
+def draw_enemy(entity: Entity, current_index: int, focus: Entity = None):
+    """Draw Enemy bars"""
+    y = draw_basic(entity, current_index, focus)
+    hp_percent = font.render(f"{ceil(entity.hp/entity.max_hp*100)}%", True, WHITE)
+    screen.blit(hp_percent, (270, y + 55))
 
 def draw_player(entity: Character, current_index: int, focus: Entity = None):
+    """Draw Player bars"""
     y = draw_basic(entity, current_index, focus)
-    # energy_text = font.render(
-    #     f"Energy: {round(entity.energy)}/{round(entity.max_energy)} ({round(entity.energy/entity.max_energy*100)}%)",
-    #     True,
-    #     GREEN,
-    # )
-    # screen.blit(mp_text, dest=(50, y + 50))
-    # screen.blit(energy_text, dest=(50, y + 65))
+
     mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN, border_width=0)
     mp_text = font.render(f"{round(entity.mp)}/{round(entity.max_mp)}", True, WHITE)
     energy_bar = Bar(
@@ -61,8 +63,9 @@ def draw_player(entity: Character, current_index: int, focus: Entity = None):
 
 
 def draw_bars(iterables: Iterable[Entity], focus: Entity = None):
+    """Draw bars"""
     for i, entity in enumerate(iterables):
         if isinstance(entity, Enemy):
-            draw_basic(entity, i, focus)
+            draw_enemy(entity, i, focus)
         if isinstance(entity, Character):
             draw_player(entity, i, focus)
