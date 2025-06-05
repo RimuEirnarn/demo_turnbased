@@ -36,6 +36,7 @@ class Entity:
         self.shield = self.shield - actual_dmg
         if self.shield < 0:
             self.hp = max(0, self.hp - abs(self.shield))
+            self.shield = 0
         return actual_dmg
 
     def attack(self, target: "Entity"):
