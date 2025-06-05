@@ -34,7 +34,7 @@ class Hero(Character):
         self.generic_regen("mp", raw=20)
         log_action(f"[{self.name}] Invoke: Slash!", COMMON_ACTION_DEST)
         self.heal(0.1 * self.atk + 0.1 * self.max_hp)
-        self.shield += 0.4 * self.atk + 0.05 * self.max_hp
+        self.shield += 0.4 * self.atk + 0.15 * self.max_hp
 
         mult = self.impose_crit(10 * self.max_hp)
         return target.take_damage(mult)
@@ -50,7 +50,7 @@ class Hero(Character):
         # self.shield += 0.2 * self.atk
         if self.hp <= (self.max_hp * 0.75) and self.shield:
             burned_shield = self.shield * 0.5
-            self.heal(burned_shield)
+            self.heal(burned_shield + self.max_mp * 0.15)
             self.shield -= burned_shield
         mult = self.impose_crit(20 * self.max_hp)
         return target.take_damage(mult)
