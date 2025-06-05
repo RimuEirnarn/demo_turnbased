@@ -62,7 +62,7 @@ def update_main():
         pygame.time.wait(1000)
         defender = player
         this_dmg = attacker.attack(player)
-        player.generic_regen("energy", raw=15)
+        player.generic_regen("energy", raw=5)
     if isinstance(attacker, Character):
         pygame.time.wait(750 + random.randint(0, 500))
         if attacker.energy == attacker.ult_encost:
