@@ -60,9 +60,9 @@ class Hero(Character):
             return StateEnum.NOT_ENOUGH_MP
         self.energy = 0
         log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
-        self.burn(self.hp * 0.9)
-        if self.shield:
-            self.shield = self.max_hp * 0.25
+        self.burn(self.hp * 0.95)
+        # if self.shield:
+            # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1):
             mult = self.impose_crit(120 * self.atk)
         self.generic_regen("mp", raw=100)
