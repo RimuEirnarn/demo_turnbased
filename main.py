@@ -53,7 +53,7 @@ def update_main():
     if not player.is_alive() or not enemy.is_alive():
         return do_win()
 
-    if action_order.cycles % 20 == 0 and action_order.cycles != 0:
+    if action_order.cycles % 10 == 0 and action_order.cycles != 0:
         player.crit_dmg += 50
 
     attacker_action = action_order.pop_next_action()
