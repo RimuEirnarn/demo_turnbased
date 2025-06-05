@@ -73,6 +73,7 @@ class ActionQueue:
 
     def add_action(self, action: Action):
         """Add action to current action order"""
+        action.value = action.base_value
         heapq.heappush(self.queue, action)
         self.total_actions += 1
         self.lookup[action.id] = action
