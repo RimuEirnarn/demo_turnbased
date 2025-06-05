@@ -33,10 +33,10 @@ class Hero(Character):
         self.generic_regen("energy", raw=10)
         self.generic_regen("mp", raw=20)
         log_action(f"[{self.name}] Invoke: Slash!", COMMON_ACTION_DEST)
-        self.heal(0.1 * self.atk)
-        self.shield += 0.4 * self.atk
+        self.heal(0.1 * self.atk + 0.1 * self.max_hp)
+        self.shield += 0.4 * self.atk + 0.05 * self.max_hp
 
-        mult = self.impose_crit(40 * self.atk)
+        mult = self.impose_crit(10 * self.max_hp)
         return target.take_damage(mult)
 
     def skill(self, target: Entity):
@@ -52,7 +52,7 @@ class Hero(Character):
             burned_shield = self.shield * 0.5
             self.heal(burned_shield)
             self.shield -= burned_shield
-        mult = self.impose_crit(60 * self.atk)
+        mult = self.impose_crit(20 * self.max_hp)
         return target.take_damage(mult)
 
     def ultimate(self, target: Entity):
@@ -60,10 +60,10 @@ class Hero(Character):
             return StateEnum.NOT_ENOUGH_MP
         self.energy = 0
         log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
-        self.burn(self.hp * 0.95)
+        self.burn(self.hp * 0.75)
         # if self.shield:
             # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1):
-            mult = self.impose_crit(120 * self.atk)
+            mult = self.impose_crit(120 * self.max_hp)
         self.generic_regen("mp", raw=100)
         return target.take_damage(mult)
