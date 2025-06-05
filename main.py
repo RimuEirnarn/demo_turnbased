@@ -23,6 +23,8 @@ action_order.add_action_by_value(enemy, base_av(enemy.spd))
 turn_order = sorted([player, enemy], key=lambda x: x.spd, reverse=True)
 turn_index = 0
 
+enemy_shield_time = False
+
 # Game loop
 running = True
 combat_log = ""
@@ -71,6 +73,10 @@ while running:
         else:
             this_dmg = attacker.basic_attack(enemy)
         defender = enemy
+
+    if enemy.hp <= (enemy.max_hp * 0.25) and enemy_shield_time is False:
+        enemy.shield += enemy.max_hp * 0.75
+        enemy_shield_time = True
 
     draw_bars([player, enemy])
     log_action(
