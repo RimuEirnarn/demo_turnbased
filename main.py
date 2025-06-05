@@ -57,6 +57,7 @@ while running:
         pygame.time.wait(1000)
         defender = player
         this_dmg = attacker.attack(player)
+        player.generic_regen('energy', raw=15)
         skill_name = "Enemy: Basic Attack"
     if isinstance(attacker, Character):
         pygame.time.wait(750 + random.randint(0, 500))
