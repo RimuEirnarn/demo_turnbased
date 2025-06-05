@@ -23,7 +23,7 @@ def draw_basic(entity: Entity, current_index: int):
             True,
             WHITE
         )
-        screen.blit(shield_text, (330, y + 25))
+        screen.blit(shield_text, (330, y + 50))
     screen.blit(name_text, (50, y))
     screen.blit(hp_text, (270, y + 25))
     shield_bar.draw(screen)
