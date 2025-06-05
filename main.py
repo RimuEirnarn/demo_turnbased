@@ -13,7 +13,7 @@ from internal.turn_system import ActionQueue, base_av
 # Demo characters
 player = Hero("Hero", hp=14500, atk=1135, defense=200, spd=180, mp=100)
 player.shield += 7500
-enemy = Enemy("Dummy", hp=130_299_791_000, atk=500, defense=0, spd=140)
+enemy = Enemy("Dummy", hp=25_130_299_791_000, atk=500, defense=0, spd=140)
 null = Entity("<NULL>", 0, 0, 0, 0)
 
 # Turn state
