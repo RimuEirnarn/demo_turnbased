@@ -125,11 +125,11 @@ def update_main():
             this_dmg = attacker.basic_attack(enemy)
         defender = enemy
 
-    if enemy.hp <= (enemy.max_hp * 0.25) and enemy_shield_time is False:
+    if enemy.hp <= (enemy.max_hp * 0.5) and enemy_shield_time is False:
         enemy.shield += enemy.max_hp * 12.75
         enemy_shield_time = True
 
-    if enemy.hp <= (enemy.max_hp * 0.05) and enemy_shield_time is True:
+    if enemy.hp <= (enemy.max_hp * 0.25) and enemy_shield_time is True:
         enemy.shield += 18.25 * enemy.max_hp
         enemy_shield_time = None
 
