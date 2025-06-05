@@ -31,7 +31,6 @@ attack_index = 0
 
 while running:
     screen.fill((50, 50, 50))
-    draw_bars([player, enemy])
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -68,6 +67,8 @@ while running:
         else:
             this_dmg = attacker.basic_attack(enemy)
         defender = enemy
+
+    draw_bars([player, enemy])
     log_action(
         f"{attacker.name} attacks {defender.name} for {round(this_dmg):,} damage",
         (50, 5),
