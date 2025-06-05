@@ -106,6 +106,7 @@ while True:
     print(
         f"\n[Action {loop+1} | Cycle {q.cycles} ({q.current_cycle_av:.0f})] {next_act.source['name']} acts. {msg}"
     )
+    q.add_action(next_act)
     if subdps and hero:
         # print("Pre-advancement")
         # show(pre)
@@ -120,7 +121,6 @@ while True:
             slow = q.get_action(slow.id)
             advg(slow, adv)
 
-    q.add_action(next_act)
     show(q)
     t = safe_input()
     if t[0] == "q":
