@@ -28,7 +28,10 @@ running = True
 combat_log = ""
 skill_set = [1, 1, 2, 1, 1, 2]
 attack_index = 0
+
+player.generic_regen('energy', 1)
 draw_bars([player, enemy])
+pygame.display.flip()
 
 while running:
     screen.fill((50, 50, 50))
