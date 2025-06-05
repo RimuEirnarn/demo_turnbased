@@ -54,18 +54,32 @@ def advg(acting_actor: Action, adv_value: number = 0, adv_delay: number = 0):
     new_av = advance(acting_actor.value, acting_actor.base_value, adv_value, adv_delay)
     prev_av = acting_actor.value
     adv_index = q.predict_action_index_after_update(acting_actor.id, new_av)
+    prev_index: int = q.index(acting_actor.id)
 
     message = (
-        f"Positioning in {adv_index+1} ticks"
+        f"Positioning in {adv_index+1} ticks from {prev_index+1} tick"
         if adv_index != 0
-        else "Will act on next action"
+        else f"Will act on next action from {prev_index+1} tick"
     )
-    action_advance = adv_value - adv_delay * 100
+    action_advance = (adv_value - adv_delay) * 100
     name = acting_actor.source["name"]
     print(
         f"Advancing {name} by {action_advance:.0f}%, from {ceil(prev_av)} -> {ceil(new_av)}. {message}"
     )
     q.update_action_value(acting_actor.id, new_av)
+
+
+def show(action_order: ActionQueue | tuple):
+    print(
+        tabulate.tabulate(
+            (
+                (index + 1, act.source["name"], ceil(act.value), round(act.value, 6))
+                for index, act in enumerate(action_order)
+            ),
+            headers=("Ticks", "Name", "AV", "Real AV"),
+            tablefmt="simple_outline",
+        )
+    )
 
 
 # Process turns
@@ -85,29 +99,25 @@ while True:
         if next_index == 0
         else f"Will act in {next_index+1} ticks"
     )
-    print(f"\n[Action {loop+1} | Cycle {q.cycles} ({q.current_cycle_av:.0f})] {next_act.source['name']} acts. {msg}")
+    # pre = tuple(q)
+    print(
+        f"\n[Action {loop+1} | Cycle {q.cycles} ({q.current_cycle_av:.0f})] {next_act.source['name']} acts. {msg}"
+    )
     if subdps and hero:
+        # print("Pre-advancement")
+        # show(pre)
         hero = q.get_action(hero.id)
         sub_dps = q.get_action(sub_dps.id)
         advg(hero, adv)
         advg(sub_dps, 0.5)
-        if enemy:
-            enemy = q.get_action(enemy.id)
-            advg(enemy, 0, 2)
+        # if enemy:
+        #     enemy = q.get_action(enemy.id)
+        #     advg(enemy, 0, 2)
 
-    print(
-        tabulate.tabulate(
-            (
-                (index + 1, act.source["name"], ceil(act.value))
-                for index, act in enumerate(q)
-            ),
-            headers=("Ticks", "Name", "AV"),
-            tablefmt="simple_outline",
-        )
-    )
+    show(q)
     t = safe_input()
     if t[0] == "q":
         break
-    if t[0] == 'a':
+    if t[0] == "a":
         print(f"Total AVs for this battle is: {q.total_av}")
     loop += 1
