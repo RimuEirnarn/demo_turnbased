@@ -33,7 +33,9 @@ class Hero(Character):
         self.generic_regen("energy", raw=10)
         self.generic_regen("mp", raw=20)
         log_action(f"[{self.name}] Invoke: Slash!", COMMON_ACTION_DEST)
-        self.heal(0.4 * self.atk)
+        self.heal(0.02 * self.atk)
+        self.shield += 0.1 * self.atk
+
         mult = self.impose_crit(40 * self.atk)
         return target.take_damage(mult)
 
@@ -44,7 +46,11 @@ class Hero(Character):
         self.generic_regen("energy", raw=15)
 
         log_action(f"[{self.name}] Invoke: Harder Slash!", COMMON_ACTION_DEST)
-        self.heal(0.4 * self.atk)
+        self.heal(0.04 * self.atk)
+        self.shield += 0.2 * self.atk
+        if self.hp <= (self.max_hp * 0.25) and self.shield:
+            self.heal(0.25 * self.shield + 0.75 * self.defense)
+            self.shield -= self.shield * 0.25
         mult = self.impose_crit(60 * self.atk)
         return target.take_damage(mult)
 
@@ -53,7 +59,9 @@ class Hero(Character):
             return StateEnum.NOT_ENOUGH_MP
         self.energy = 0
         log_action(f'[{self.name}] Invoke: "Take This!"', COMMON_ACTION_DEST)
-        self.burn(self.hp * 0.8)
+        self.burn(self.hp * 0.9)
+        if self.shield:
+            self.shield = 190
         with self.temp("crit_dmg", 142.1):
             mult = self.impose_crit(120 * self.atk)
         self.generic_regen("mp", raw=100)
