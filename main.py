@@ -81,8 +81,6 @@ def update_main():
         (50, 5),
     )
 
-    if not player.is_alive() or not enemy.is_alive():
-        return do_win()
 
     action_order.add_action_by_value(
         attacker, attacker_action.base_value, attacker_action.id
