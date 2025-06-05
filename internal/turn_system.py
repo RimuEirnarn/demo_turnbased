@@ -111,11 +111,6 @@ class ActionQueue:
         # Snapshot current AVs
         snapshot = [Action(a.id, a.value, a.source) for a in self.queue]
 
-        # Normalize snapshot values (simulate passage of time)
-        min_value = min(a.value for a in snapshot)
-        for a in snapshot:
-            a.value -= min_value
-
         # Simulate reinsertion
         target_action = self.lookup[action_id]
         predicted = Action(target_action.id, target_action.base_value, target_action.source)
@@ -158,6 +153,11 @@ class ActionQueue:
 
         return None
 
+    def index(self, action_id: str):
+        """Get index of an action"""
+        if not action_id in self.lookup:
+            return None
+        return self.get_ordered_list().index(self.lookup[action_id])
 
     def get_ordered_list(self):
         """Return as ordered list"""
