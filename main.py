@@ -28,6 +28,7 @@ running = True
 combat_log = ""
 skill_set = [1, 1, 2, 1, 1, 2]
 attack_index = 0
+draw_bars([player, enemy])
 
 while running:
     screen.fill((50, 50, 50))
