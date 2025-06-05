@@ -1,4 +1,5 @@
 """Entities"""
+
 # pylint: disable=unused-argument,missing-class-docstring,missing-function-docstring
 
 import random
@@ -6,7 +7,8 @@ from typing import Literal
 from .enums import StateEnum
 from .types import number
 from .utils import Temporary
-from .basic_graphics import log_action
+from .basic_graphics import log_action, COMMON_CRIT_DEST
+
 
 class Entity:
     def __init__(
@@ -112,7 +114,7 @@ class Character(Entity):
             crit = base_dmg * (1 + self.crit_dmg)
             log_action(
                 f"Does CRIT! from {round(base_dmg):,} to {round(crit):,} ({self.crit_dmg*100:,.2f}%)",
-                (270, 75),
+                COMMON_CRIT_DEST,
             )
             return crit
         return base_dmg
