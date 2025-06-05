@@ -40,7 +40,7 @@ class Bar:
         self._width = width
         self._height = height
         self.max_value = max_value
-        self.current_value = current_value
+        self.current_value = max(0, min(current_value, max_value))
         self.color = color
         self.bg_color = bg_color
         self.border_color = border_color

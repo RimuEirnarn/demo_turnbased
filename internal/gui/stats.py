@@ -1,31 +1,43 @@
 """Stats-related GUI"""
-from math import ceil
-from ..basic_graphics import font, screen, GREEN, RED, WHITE
+
+from ..basic_graphics import font, screen, GREEN, WHITE, BLUE
 from ..entities import Entity, Character, Enemy
+from .bars import Bar
+
 
 def draw_basic(entity: Entity, current_index: int):
-    y = 50 + current_index * 100
+    y = 50 + current_index * 150
     name_text = font.render(f"{entity.name}", True, WHITE)
     hp_text = font.render(
-        f"HP: {round(entity.hp):,}/{round(entity.max_hp):,} ({ceil(entity.hp/entity.max_hp*100)}%)",
+        f"{round(entity.hp):,}",
         True,
-        RED,
+        WHITE,
+    )
+    hp_bar = Bar(50, y + 25, 200, 20, entity.max_hp, entity.hp, BLUE, border_width=0)
+    shield_bar = Bar(
+        50 - 4, y + 25 - 4, 200 + 8, 20 + 8, entity.max_hp, entity.shield, WHITE, border_width=0
     )
     screen.blit(name_text, (50, y))
-    screen.blit(hp_text, dest=(50, y + 25))
+    screen.blit(hp_text, (270, y + 25))
+    shield_bar.draw(screen)
+    hp_bar.draw(screen)
     return y
 
 
 def draw_player(entity: Character, current_index: int):
     y = draw_basic(entity, current_index)
-    mp_text = font.render(f"MP: {round(entity.mp)}/{round(entity.max_mp)}", True, GREEN)
-    energy_text = font.render(
-        f"Energy: {round(entity.energy)}/{round(entity.max_energy)} ({round(entity.energy/entity.max_energy*100)}%)",
-        True,
-        GREEN,
-    )
-    screen.blit(mp_text, dest=(50, y + 50))
-    screen.blit(energy_text, dest=(50, y + 65))
+    # mp_text = font.render(f"MP: {round(entity.mp)}/{round(entity.max_mp)}", True, GREEN)
+    # energy_text = font.render(
+    #     f"Energy: {round(entity.energy)}/{round(entity.max_energy)} ({round(entity.energy/entity.max_energy*100)}%)",
+    #     True,
+    #     GREEN,
+    # )
+    # screen.blit(mp_text, dest=(50, y + 50))
+    # screen.blit(energy_text, dest=(50, y + 65))
+    mp_bar = Bar(50, y + 55, 150, 20, entity.max_mp, entity.mp, GREEN)
+    energy_bar = Bar(50, y + 80, 150, 20, entity.max_energy, entity.energy, WHITE)
+    mp_bar.draw(screen)
+    energy_bar.draw(screen)
 
 
 def draw_bars(iterables):

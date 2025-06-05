@@ -31,7 +31,10 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (200, 50, 50)
 GREEN = (50, 200, 50)
+BLUE = (50, 50, 200)
 
+COMMON_ACTION_DEST = (340, 50)
+COMMON_CRIT_DEST = (340, 75)
 
 def log_action(value: str, dest: tuple[int, int]):
     """Log actions"""
