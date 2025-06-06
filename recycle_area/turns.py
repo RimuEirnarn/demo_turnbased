@@ -77,7 +77,7 @@ def system_quit():
 
 MENU_ACTION = {
     1: ("Advance actor", advance_actor),
-    "Q": ("Quit", system_quit)
+    "q": ("Quit", system_quit)
 }
 
 def advg(acting_actor: Action, adv_value: number = 0, adv_delay: number = 0):
