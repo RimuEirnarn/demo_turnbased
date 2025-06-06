@@ -2,6 +2,7 @@
 from math import ceil
 import sys
 import os.path
+from typing import TypeVar, Type
 import pygame
 
 import tabulate
@@ -13,6 +14,8 @@ from internal.types import number
 from internal.turn_system import Action, ActionQueue, advance, base_av, ENEMY_BASE_SPD
 
 pygame.quit()  # pylint: disable=no-member
+
+T = TypeVar("T")
 
 # Example actors
 
@@ -33,8 +36,8 @@ actors = [
 # Create the queue
 q = ActionQueue()
 
-for actor in actors:
-    q.add_action_by_value(actor, base_av(actor["spd"]))
+for _actor in actors:
+    q.add_action_by_value(_actor, base_av(_actor["spd"]))
 
 
 def safe_input():
@@ -42,6 +45,12 @@ def safe_input():
     print("\033[2K\r\033[1A", end="")
     return "0" if not r else r[0]
 
+def input_cast(prompt: str, type_: Type[T], default: T = None) -> T:
+    r = input(prompt)
+    try:
+        return type_(r)
+    except (ValueError, TypeError):
+        return default
 
 hero = None
 enemy = None
@@ -50,6 +59,26 @@ slow = None
 adv = 0.7
 loop = 0
 
+
+def advance_actor():
+    name = input("Name? ")
+    if not name:
+        return
+    advance_value = input_cast("Value (%)? ", int)
+    actor_names = tuple((act.source['name'] for act in q.get_ordered_list()))
+    if not name in actor_names:
+        print("No name in entry")
+        return
+    actor = q.get_ordered_list()[actor_names.index(name)]
+    advg(actor, advance_value)
+
+def system_quit():
+    return True
+
+MENU_ACTION = {
+    1: ("Advance actor", advance_actor),
+    "Q": ("Quit", system_quit)
+}
 
 def advg(acting_actor: Action, adv_value: number = 0, adv_delay: number = 0):
     new_av = advance(acting_actor.value, acting_actor.base_value, adv_value, adv_delay)
@@ -82,6 +111,25 @@ def show(action_order: ActionQueue | tuple):
         )
     )
 
+def show_menu():
+    callback = tuple(entry[1] for entry in MENU_ACTION.values())
+    sels = "\n".join(f"[{input_selection}]: {data[0]}" for input_selection, data in MENU_ACTION.items())
+    select = input(f"""\
+Select action:
+{sels}
+> """)
+    if select == 'Q':
+        return True
+    if not select:
+        return
+
+    select = int(select)
+    if select > len(callback):
+        return
+    if select == -999:
+        return
+    callback[select-1]()
+    return
 
 # Process turns
 while True:
@@ -108,23 +156,23 @@ while True:
     )
     q.add_action(next_act)
     if subdps and hero:
-        # print("Pre-advancement")
-        # show(pre)
+
         hero = q.get_action(hero.id)
         sub_dps = q.get_action(sub_dps.id)
         advg(hero, adv)
         advg(sub_dps, 0.5)
-        # if enemy:
-        #     enemy = q.get_action(enemy.id)
-        #     advg(enemy, 0, 2)
+
         if slow:
             slow = q.get_action(slow.id)
             advg(slow, adv)
 
     show(q)
-    t = safe_input()
-    if t[0] == "q":
+    if show_menu():
         break
-    if t[0] == "a":
-        print(f"Total AVs for this battle is: {q.total_av}")
+    # t = safe_input()
+    # if t[0] == "q":
+    #     break
+    # if t[0] == "a":
+        # print(f"Total AVs for this battle is: {q.total_av}")
+
     loop += 1
