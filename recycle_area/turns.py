@@ -70,7 +70,7 @@ def advance_actor():
         print("No name in entry")
         return
     actor = q.get_ordered_list()[actor_names.index(name)]
-    advg(actor, advance_value)
+    advg(actor, advance_value/100)
 
 def system_quit():
     return True
