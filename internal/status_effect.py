@@ -1,10 +1,12 @@
 # pylint: disable=all
 
 from enum import IntEnum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type, TypeVar
 
 if TYPE_CHECKING:
     from .entities import Entity
+
+TypeSE = TypeVar("StatusEffectT", bound="StatusEffect")
 
 class EffectType(IntEnum):
     BUFF = 1
@@ -38,6 +40,10 @@ class StatusEffect:
             print(f"{self.name} already at max stacks ({self.max_stacks}).")
         self.remaining_duration = self.duration
 
+    def on_turn_start(self, target: "Entity"):
+        if not self.active:
+            return
+
     def on_turn_end(self, target: "Entity"):
         if not self.active:
             return
@@ -46,3 +52,17 @@ class StatusEffect:
         if self.remaining_duration <= 0:
             self.active = False
             self.remove(target)
+
+# === Decorators ===
+
+def buff(cls: Type[TypeSE]):
+    cls.type = EffectType.BUFF
+    return cls
+
+def debuff(cls: Type[TypeSE]):
+    cls.type = EffectType.DEBUFF
+    return cls
+
+def neutral(cls: Type[TypeSE]):
+    cls.type = EffectType.NEUTRAL
+    return cls
