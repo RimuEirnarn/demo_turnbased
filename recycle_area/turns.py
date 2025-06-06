@@ -112,17 +112,15 @@ def show(action_order: ActionQueue | tuple):
     )
 
 def show_menu():
-    callback = tuple(entry[1] for entry in MENU_ACTION.values())
     sels = "\n".join(f"[{input_selection}]: {data[0]}" for input_selection, data in MENU_ACTION.items())
     select = input(f"""\
 Select action:
 {sels}
 > """)
 
-    if select > len(callback):
+    if not select in MENU_ACTION:
         return
-    callback[select-1]()
-    return
+    return MENU_ACTION[select][1]()
 
 # Process turns
 while True:
