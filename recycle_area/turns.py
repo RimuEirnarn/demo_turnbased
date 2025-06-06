@@ -118,15 +118,8 @@ def show_menu():
 Select action:
 {sels}
 > """)
-    if select == 'Q':
-        return True
-    if not select:
-        return
 
-    select = int(select)
     if select > len(callback):
-        return
-    if select == -999:
         return
     callback[select-1]()
     return
