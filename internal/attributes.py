@@ -67,5 +67,5 @@ class Attributes:
     effect_res: number = 0
 
     res: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
-    res_pen: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy())
-    bonus: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy())
+    res_pen: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
+    bonus: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
