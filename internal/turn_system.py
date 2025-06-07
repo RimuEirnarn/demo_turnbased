@@ -1,9 +1,12 @@
 """Turn system"""
 
 import heapq
+from typing import TYPE_CHECKING
 import uuid
-from internal.entities import Entity
 from internal.types import number
+
+if TYPE_CHECKING:
+    from internal.entities import Entity
 
 AV_K_VALUE = 10000
 ENEMY_BASE_SPD = 50
@@ -33,7 +36,7 @@ class Action:
     """Action class"""
 
     def __init__(
-        self, action_id: str, value: number, source: Entity, priority: int, __value=-1
+        self, action_id: str, value: number, source: "Entity", priority: int, __value=-1
     ):
         self.id = action_id  # Unique identifier for the action
         self.value = value  # Lower value means earlier turn
@@ -60,7 +63,7 @@ class ActionQueue:
         self.current_cycle_av = FIRST_CYCLE_AV
         self.total_actions = 0
 
-    def add_action_by_value(self, source: Entity, value: number, acting_id: str = ""):
+    def add_action_by_value(self, source: "Entity", value: number, acting_id: str = ""):
         """Add action (frmo values) to current action order"""
         action_id = (
             str(uuid.uuid4()) if acting_id == "" else acting_id
@@ -111,7 +114,7 @@ class ActionQueue:
         self.add_action_by_value(action.source, action.base_value, acting_id=action.id)
         return action
 
-    def update_action_value(self, action_id, new_value):
+    def update_action_value(self, action_id: str, new_value: number):
         """Update an action's AV"""
         if action_id not in self.lookup:
             raise ValueError("Action ID not found")
