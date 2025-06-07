@@ -2,13 +2,10 @@
 
 from dataclasses import dataclass, field
 from math import ceil
-from typing import TypeVar
 
 from internal.elements import Elements
 from internal.types import number
 # pylint: disable=all
-
-T = TypeVar('Tnumber')
 
 DEFAULT_MAPPING = {
     Elements.RADIANCE: 0,
@@ -23,7 +20,7 @@ DEFAULT_MAPPING = {
 }
 
 @dataclass
-class Stat:
+class Stat[Tnum]:
     base: float = 0
     multiplier: float = 0
     additive: int = 0
@@ -42,16 +39,16 @@ class Stat:
     def __repr__(self):
         return f"<Stat base={self.base} mult={1+self.multiplier}% add={self.additive}>"
 
-    def __add__(self, other: T) -> T:
+    def __add__(self, other: Tnum) -> Tnum:
         return float(self) + other
 
-    def __sub__(self, other: T) -> T:
+    def __sub__(self, other: Tnum) -> Tnum:
         return float(self) - other
 
-    def __mul__(self, other: T) -> T:
+    def __mul__(self, other: Tnum) -> Tnum:
         return float(self) * other
 
-    def __div__(self, other: T) -> T:
+    def __div__(self, other: Tnum) -> Tnum:
         return float(self) / other
 
 @dataclass
