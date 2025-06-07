@@ -2,7 +2,7 @@
 
 import pygame
 
-from internal.types import AnchorEnum
+from internal.types import AnchorEnum, Coords, Size
 
 APP_TITLE = "Turn-based Demo"
 RESOLUTIONS = [
@@ -36,7 +36,8 @@ BLUE = (50, 50, 200)
 COMMON_ACTION_DEST = (440, 50)
 COMMON_CRIT_DEST = (440, 75)
 
-def log_action(value: str, dest: tuple[int, int]):
+
+def log_action(value: str, dest: Coords):
     """Log actions"""
     # print(value)
     text = font.render(value, True, WHITE)
@@ -44,8 +45,8 @@ def log_action(value: str, dest: tuple[int, int]):
 
 
 def anchored_position(
-    anchor: AnchorEnum, offset_x: int = 0, offset_y: int = 0, screen_size: tuple[int, int] = (0, 0)
-):
+    anchor: AnchorEnum, offset_x: int = 0, offset_y: int = 0, screen_size: Size = (0, 0)
+) -> Coords:
     """Anchor position relative from screen"""
     if anchor == "topleft":
         return (offset_x, offset_y)
