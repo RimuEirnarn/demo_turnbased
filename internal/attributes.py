@@ -5,6 +5,7 @@ from math import ceil
 
 from internal.elements import Elements
 from internal.types import number
+
 # pylint: disable=all
 
 DEFAULT_MAPPING = {
@@ -16,8 +17,9 @@ DEFAULT_MAPPING = {
     Elements.ELECTRO: 0,
     Elements.GLACIO: 0,
     Elements.GEO: 0,
-    Elements.PLANTEA: 0
+    Elements.PLANTEA: 0,
 }
+
 
 @dataclass
 class Stat[Tnum]:
@@ -51,18 +53,23 @@ class Stat[Tnum]:
     def __div__(self, other: Tnum) -> Tnum:
         return float(self) / other
 
+
 @dataclass
-class Attributes:
+class EntityAttribute:
     hp: Stat
     atk: Stat
     def_: Stat
     spd: Stat
 
-    crit_rate: number = 0.05
-    crit_dmg: number = 0.5
     effect_rate: number = 0
     effect_res: number = 0
 
     res: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
     res_pen: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
     bonus: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
+
+
+@dataclass
+class Attribute(EntityAttribute):
+    crit_rate: number = 0.05
+    crit_dmg: number = 0.5
