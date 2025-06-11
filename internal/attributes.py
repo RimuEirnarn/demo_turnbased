@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Type, TypeVar
 
 from internal.elements import Elements
 from internal.types import number
