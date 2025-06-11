@@ -70,5 +70,10 @@ class EntityAttribute:
 
 @dataclass
 class Attribute(EntityAttribute):
+    mp: Stat = field(default_factory=lambda: None) # type: ignore
     crit_rate: number = 0.05
     crit_dmg: number = 0.5
+
+    def __post_init__(self):
+        if self.mp is None:
+            raise RuntimeError("MP is unset")

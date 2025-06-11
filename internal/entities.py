@@ -4,6 +4,9 @@
 
 import random
 from typing import Literal
+
+from internal.attributes import Attribute, EntityAttribute
+
 from .enums import StateEnum
 from .types import number
 from .utils import Temporary
@@ -12,15 +15,32 @@ from .basic_graphics import log_action, COMMON_CRIT_DEST
 
 class Entity:
     def __init__(
-        self, name: str, hp: number, atk: number, defense: number, spd: number
+        self, name: str, stats: EntityAttribute
     ):
         self.name = name
-        self.max_hp = hp
-        self.hp = hp
-        self.atk = atk
-        self.defense = defense
-        self.spd = spd
+        self.stats = stats
+        self.hp = self.max_hp
         self.shield = 0
+
+    @property
+    def max_hp(self):
+        """Max HP"""
+        return self.stats.hp.value
+
+    @property
+    def atk(self):
+        """ATK"""
+        return self.stats.atk.value
+
+    @property
+    def defense(self):
+        """DEF"""
+        return self.stats.def_.value
+
+    @property
+    def spd(self):
+        """SPD"""
+        return self.stats.spd
 
     def is_alive(self):
         """Return true if HP is more than 0"""
@@ -57,21 +77,36 @@ class Character(Entity):
     def __init__(
         self,
         name: str,
-        hp: number,
-        atk: number,
-        defense: number,
-        spd: number,
-        mp: number,
+        stats: Attribute
     ):
-        super().__init__(name, hp, atk, defense, spd)
-        self.max_mp = mp
-        self.mp = mp
+        super().__init__(name, stats)
+        self.stats: Attribute = stats
+        self.max_mp = self.stats.mp.value
+        self.mp = self.max_mp
         self.max_energy = StateEnum.UNDEFINED
         self.energy = 0
-        self.crit_rate = 0.25
-        self.crit_dmg = 0.5
         self.skill_mpcost = StateEnum.UNDEFINED
         self.ult_encost = self.max_energy
+
+    @property
+    def crit_rate(self):
+        """Crit Rate"""
+        return self.stats.crit_rate
+
+    @crit_rate.setter
+    def crit_rate(self, cr: number):
+        """Crit Rate"""
+        self.stats.crit_rate = cr
+
+    @property
+    def crit_dmg(self):
+        """Crit DMG"""
+        return self.stats.crit_dmg
+
+    @crit_dmg.setter
+    def crit_dmg(self, cdmg: number):
+        """Crit DMG"""
+        self.stats.crit_dmg = cdmg
 
     def check_mp(self, cost: number):
         """Check if current MP is more than cost"""
