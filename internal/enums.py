@@ -27,3 +27,20 @@ class EntityType(IntEnum):
     """Entity Type"""
     CHARACTERS = 1
     ENEMY = 0
+
+class DamageType(IntEnum):
+    """Damage types"""
+
+    # HAS TO BE EQUAL
+    Radiance = 1
+    Abyss = 2
+    Pyro = 3
+    Hydro = 4
+    Electro = 5
+    Glacio = 6
+    Aero = 7
+    Geo = 8
+    Plantea = 9
+
+    TRUE = 0
+    Base = -1
