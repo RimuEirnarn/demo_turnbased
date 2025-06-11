@@ -2,28 +2,17 @@
 
 # pylint: disable=missing-class-docstring
 
+from internal.attributes import Attribute
 from ..entities import Character, Entity
-from ..types import number  # pylint: disable=no-name-in-module
 from ..enums import StateEnum
 from ..basic_graphics import log_action, COMMON_ACTION_DEST
 
 
 # Player character class
 class Hero(Character):
-    def __init__(
-        self,
-        name: str,
-        hp: number,
-        atk: number,
-        defense: number,
-        spd: number,
-        mp: number,
-    ):
-        super().__init__(name, hp, atk, defense, spd, mp)
-        self.max_mp = mp
-        self.mp = mp
+    def __init__(self, name: str, stats: Attribute):
+        super().__init__(name, stats)
         self.max_energy = 110
-        self.energy = 0
         self.crit_rate = 1
         self.crit_dmg = 55.2
         self.skill_mpcost = 20
@@ -66,7 +55,7 @@ class Hero(Character):
         self.burn(burned_hp)
         # self.shield += burned_hp * 0.4
         # if self.shield:
-            # self.shield = self.max_hp * 0.25
+        # self.shield = self.max_hp * 0.25
         with self.temp("crit_dmg", 142.1 + self.crit_dmg):
             mult = self.impose_crit(120 * self.max_hp)
         self.generic_regen("mp", mult=0.5)
