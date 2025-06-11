@@ -14,9 +14,7 @@ from .basic_graphics import log_action, COMMON_CRIT_DEST
 
 
 class Entity:
-    def __init__(
-        self, name: str, stats: EntityAttribute
-    ):
+    def __init__(self, name: str, stats: EntityAttribute):
         self.name = name
         self.stats = stats
         self.hp = self.max_hp
@@ -75,11 +73,7 @@ class Entity:
 
 # Player character class
 class Character(Entity):
-    def __init__(
-        self,
-        name: str,
-        stats: Attribute
-    ):
+    def __init__(self, name: str, stats: Attribute):
         super().__init__(name, stats)
         self.stats: Attribute = stats
         self.max_mp = self.stats.mp.value
