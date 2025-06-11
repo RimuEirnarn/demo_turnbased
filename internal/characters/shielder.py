@@ -4,16 +4,18 @@
 
 from typing import Iterable
 
+from internal.attributes import Attribute
 from internal.enums import StateEnum
 from ..entities import Character, Entity
 
 class Healer(Character):
-    def __init__(self, name, hp, atk, defense, spd, mp):
-        super().__init__(name, hp, atk, defense, spd, mp)
+    def __init__(self, name: str, stats: Attribute):
+        super().__init__(name, stats)
         self.max_energy = 100
         self.skill_mpcost = 20
         self.crit_rate = 1
         self.crit_dmg = 1.5
+        self.ult_encost = self.max_energy
 
     def basic_attack(self, target):
         damage = self.impose_crit(0.5 * self.max_hp)
