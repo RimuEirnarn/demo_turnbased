@@ -7,7 +7,7 @@ from typing import Literal
 
 from internal.attributes import Attribute, EntityAttribute
 
-from .enums import StateEnum
+from .enums import EntityType, StateEnum
 from .types import number
 from .utils import Temporary
 from .basic_graphics import log_action, COMMON_CRIT_DEST
@@ -21,6 +21,7 @@ class Entity:
         self.stats = stats
         self.hp = self.max_hp
         self.shield = 0
+        self.type = EntityType.UNDEFINED
 
     @property
     def max_hp(self):
@@ -87,6 +88,7 @@ class Character(Entity):
         self.energy = 0
         self.skill_mpcost = StateEnum.UNDEFINED
         self.ult_encost = self.max_energy
+        self.type = EntityType.CHARACTERS
 
     @property
     def crit_rate(self):
@@ -171,4 +173,6 @@ class Character(Entity):
 
 # Enemy class (inherits from Entity directly)
 class Enemy(Entity):
-    pass
+    def __init__(self, name: str, stats: EntityAttribute):
+        super().__init__(name, stats)
+        self.type = EntityType.ENEMY
