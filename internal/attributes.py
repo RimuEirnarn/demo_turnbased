@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from math import ceil
+from typing import Type, TypeVar
 
 from internal.elements import Elements
 from internal.types import number
@@ -20,9 +21,8 @@ DEFAULT_MAPPING = {
     Elements.PLANTEA: 0,
 }
 
-
 @dataclass
-class Stat[Tnum]:
+class Stat:
     base: float = 0
     multiplier: float = 0
     additive: int = 0
@@ -41,16 +41,16 @@ class Stat[Tnum]:
     def __repr__(self):
         return f"<Stat base={self.base} mult={1+self.multiplier}% add={self.additive}>"
 
-    def __add__(self, other: Tnum) -> Tnum:
+    def __add__(self, other: float) -> float:
         return float(self) + other
 
-    def __sub__(self, other: Tnum) -> Tnum:
+    def __sub__(self, other: float) -> float:
         return float(self) - other
 
-    def __mul__(self, other: Tnum) -> Tnum:
+    def __mul__(self, other: float) -> float:
         return float(self) * other
 
-    def __div__(self, other: Tnum) -> Tnum:
+    def __div__(self, other: float) -> float:
         return float(self) / other
 
 
@@ -64,9 +64,9 @@ class EntityAttribute:
     effect_rate: number = 0
     effect_res: number = 0
 
-    res: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
-    res_pen: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
-    bonus: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy)
+    res: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy) # type: ignore
+    res_pen: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy) # type: ignore
+    bonus: dict[Elements, number] = field(default_factory=DEFAULT_MAPPING.copy) # type: ignore
 
 
 @dataclass
