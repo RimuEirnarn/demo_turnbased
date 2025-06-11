@@ -3,10 +3,21 @@
 # pylint: disable=missing-class-docstring,missing-function-docstring
 
 from random import random
-from typing import NamedTuple
+from typing import NamedTuple, TYPE_CHECKING
 
-from internal.enums import EntityType
+from internal.enums import DamageType, EntityType
 from internal.types import number
+
+if TYPE_CHECKING:
+    from internal.entities import Entity
+
+# Classes
+
+class Hit(NamedTuple):
+    base_dmg: number
+    attacker: "Entity"
+    dmg_type: DamageType
+    defender: "Entity"
 
 # Constants
 
