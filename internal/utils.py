@@ -1,9 +1,9 @@
 """Utilities"""
 
-from typing import Any, Type
+from typing import Any
 
 class Temporary:
-    def __init__(self, caller: Type[Any], attr_name: str, value: Any):
+    def __init__(self, caller: Any, attr_name: str, value: Any):
         self.temp = value
         self.attr_name = attr_name
         self.caller = caller
