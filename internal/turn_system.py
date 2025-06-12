@@ -36,11 +36,16 @@ class Action:
     """Action class"""
 
     def __init__(
-        self, action_id: str, value: number, source: "Entity", priority: int, __value=-1
+        self,
+        action_id: str,
+        value: number,
+        source: "Entity",
+        priority: int,
+        base_value_override: number = -1,
     ):
         self.id = action_id  # Unique identifier for the action
         self.value = value  # Lower value means earlier turn
-        self.base_value = value if __value == -1 else __value
+        self.base_value = value if base_value_override == -1 else base_value_override
         self.source = source  # Pointer to the actor (can be character/summon/enemy)
         self.priority = priority
 
@@ -51,6 +56,12 @@ class Action:
             else self.priority < other.priority
         )
 
+    @property
+    def is_usable(self):
+        """Return true if this action can be used"""
+        return self.id != ''
+
+NullAction = Action("", -1, None, -1) # type: ignore
 
 class ActionQueue:
     """Action Order"""
@@ -69,6 +80,8 @@ class ActionQueue:
             str(uuid.uuid4()) if acting_id == "" else acting_id
         )  # Generate unique ID
         action = Action(action_id, value, source, priority=self.total_actions)
+        if not action.is_usable:
+            raise ValueError("Unusable Action (null-valued id) cannot be registered.")
         heapq.heappush(self.queue, action)
         self.total_actions += 1
         self.lookup[action_id] = action
@@ -76,22 +89,24 @@ class ActionQueue:
 
     def add_action(self, action: Action):
         """Add action to current action order"""
+        if not action.is_usable:
+            raise ValueError("Unusable Action (null-valued id) cannot be registered.")
         action.value = action.base_value
         heapq.heappush(self.queue, action)
         self.total_actions += 1
         self.lookup[action.id] = action
         return action.id
 
-    def get_next_action(self):
+    def get_next_action(self) -> Action:
         """Get next action"""
         if not self.queue:
-            return None
+            return NullAction
         return self.queue[0]
 
     def pop_next_action(self):
         """Return and pop next action"""
         if not self.queue:
-            return None
+            return NullAction
         min_value = self.queue[0].value
 
         for action in self.queue:
