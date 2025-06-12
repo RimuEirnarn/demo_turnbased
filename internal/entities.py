@@ -6,6 +6,7 @@ import random
 from typing import Literal
 
 from internal.attributes import Attribute, EntityAttribute
+from internal.elements import Elements
 
 from .enums import EntityType, StateEnum
 from .types import number
@@ -20,6 +21,7 @@ class Entity:
         self.hp = self.max_hp
         self.shield = 0
         self.type = EntityType.UNDEFINED
+        self.element = Elements.UNDEFINED
 
     @property
     def max_hp(self):
