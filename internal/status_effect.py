@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Type, TypeVar
 if TYPE_CHECKING:
     from .entities import Entity
 
-TypeSE = TypeVar("StatusEffectT", bound="StatusEffect")
+TypeSE = TypeVar("TypeSE", bound="StatusEffect")
 
 class EffectType(IntEnum):
     BUFF = 1
@@ -56,13 +56,13 @@ class StatusEffect:
 # === Decorators ===
 
 def buff(cls: Type[TypeSE]):
-    cls.type = EffectType.BUFF
+    cls.type = EffectType.BUFF # type: ignore
     return cls
 
 def debuff(cls: Type[TypeSE]):
-    cls.type = EffectType.DEBUFF
+    cls.type = EffectType.DEBUFF # type: ignore
     return cls
 
 def neutral(cls: Type[TypeSE]):
-    cls.type = EffectType.NEUTRAL
+    cls.type = EffectType.NEUTRAL # type: ignore
     return cls
