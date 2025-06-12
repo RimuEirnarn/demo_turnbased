@@ -7,6 +7,7 @@ from typing import Literal
 
 from internal.attributes import Attribute, EntityAttribute
 from internal.elements import Elements
+from internal.status_effect import StatusEffect
 
 from .enums import EntityType, StateEnum
 from .types import number
@@ -18,6 +19,7 @@ class Entity:
     def __init__(self, name: str, stats: EntityAttribute):
         self.name = name
         self.stats = stats
+        self.effects: list[StatusEffect] = []
         self.hp = self.max_hp
         self.shield = 0
         self.type = EntityType.UNDEFINED
@@ -64,6 +66,9 @@ class Entity:
         """Attack a target"""
         return target.take_damage(self.atk)
 
+    def deal_damage(self, target: "Entity", value: number):
+        """Deal damage to target"""
+
     def heal(self, value: number):
         """Heal this unit based on value"""
         self.hp = min(self.hp + value, self.max_hp)
@@ -72,6 +77,15 @@ class Entity:
         """Temporarily change a value"""
         return Temporary(self, attr, value)
 
+    def tick_down(self):
+        """Ticks all statuses"""
+        for effect in self.effects:
+            effect.on_turn_end(self)
+
+    def turn_start(self):
+        """Event for turn-starts"""
+        for effect in self.effects:
+            effect.on_turn_start(self)
 
 # Player character class
 class Character(Entity):
