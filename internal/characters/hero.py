@@ -3,6 +3,7 @@
 # pylint: disable=missing-class-docstring
 
 from internal.attributes import Attribute
+from internal.elements import Elements
 from ..entities import Character, Entity
 from ..enums import StateEnum
 from ..basic_graphics import log_action, COMMON_ACTION_DEST
@@ -17,6 +18,7 @@ class Hero(Character):
         self.crit_dmg = 55.2
         self.skill_mpcost = 20
         self.ult_encost = self.max_energy
+        self.element = Elements.RADIANCE
 
     def basic_attack(self, target: Entity):
         self.generic_regen("energy", raw=15)

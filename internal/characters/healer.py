@@ -5,6 +5,7 @@
 from typing import Iterable
 
 from internal.attributes import Attribute
+from internal.elements import Elements
 from internal.enums import StateEnum
 from ..entities import Character, Entity
 
@@ -16,6 +17,7 @@ class Healer(Character):
         self.crit_rate = 1
         self.crit_dmg = 1.5
         self.ult_encost = self.max_energy
+        self.element = Elements.ABYSS
 
     def basic_attack(self, target):
         damage = self.impose_crit(0.5 * self.max_hp)
