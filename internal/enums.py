@@ -27,6 +27,8 @@ class EntityType(IntEnum):
     """Entity Type"""
     CHARACTERS = 1
     ENEMY = 0
+    SUMMONS = 2
+    ACTIONS = 3
     UNDEFINED = -1
 
 class DamageType(IntEnum):
