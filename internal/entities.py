@@ -43,7 +43,7 @@ class Entity:
     @property
     def spd(self):
         """SPD"""
-        return self.stats.spd
+        return self.stats.spd.value
 
     def is_alive(self):
         """Return true if HP is more than 0"""
