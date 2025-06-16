@@ -47,3 +47,10 @@ class DamageType(IntEnum):
 
     TRUE = 0
     Base = -1
+
+class ActionType(IntEnum):
+    """Action Types"""
+    NORMAL = 0
+    FOLLOW_UP = 1
+    ULTIMATE = 2
+    EXTRA_ACTION = -1

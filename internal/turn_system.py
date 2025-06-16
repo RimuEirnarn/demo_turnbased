@@ -3,6 +3,7 @@
 import heapq
 from typing import TYPE_CHECKING
 import uuid
+from internal.enums import ActionType
 from internal.types import number
 
 if TYPE_CHECKING:
@@ -42,12 +43,14 @@ class Action:
         source: "Entity",
         priority: int,
         base_value_override: number = -1,
+        action_type: ActionType = ActionType.NORMAL
     ):
         self.id = action_id  # Unique identifier for the action
         self.value = value  # Lower value means earlier turn
         self.base_value = value if base_value_override == -1 else base_value_override
         self.source = source  # Pointer to the actor (can be character/summon/enemy)
         self.priority = priority
+        self.type = action_type
 
     def __lt__(self, other: "Action"):
         return (
